@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dhivakar.mysamples.notifications.NotificationsManager">
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/notification_samples"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:textAllCaps="false"
+        android:id="@+id/notification_title"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@id"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="49dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>-->
+
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_notifications"
+    tools:context="com.dhivakar.mysamples.notifications.NotificationsManager">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/notification_samples"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:textAllCaps="false"
+        android:id="@+id/notification_title"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Activity A"
+        android:id="@+id/buttonStartActivityA"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Activity B"
+        android:id="@+id/buttonStartActivityB"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Activity C"
+        android:id="@+id/buttonStartActivityC"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Activity D"
+        android:id="@+id/buttonStartActivityD"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:layout_width="match_parent"
+            android:id="@+id/textViewTaskInfo"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:background="#000000"/>
+    </ScrollView>
+
+
+</android.support.v7.widget.LinearLayoutCompat>
