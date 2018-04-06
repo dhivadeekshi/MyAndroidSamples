@@ -1,12 +1,12 @@
 package com.dhivakar.mysamples.notifications;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.dhivakar.mysamples.BaseAppCompatActivity;
 import com.dhivakar.mysamples.R;
 
-public class NotificationsManager extends AppCompatActivity {
+public class NotificationsManager extends BaseAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
