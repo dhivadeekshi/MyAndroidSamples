@@ -6,4 +6,5 @@
     <string name="launch_orientations">Launch Orientations</string>
     <string name="message_no_settings_permission">You don\'t have permission to edit device settings. Please goto the settings page and allow permission</string>
     <string name="action_open_settings">Goto</string>
+    <string name="launch_externalapps">Launch External Apps</string>
 </resources>
