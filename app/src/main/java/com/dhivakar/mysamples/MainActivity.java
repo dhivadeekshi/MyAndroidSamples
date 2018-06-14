@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.dhivakar.mysamples.notifications.NotificationsManager;
 import com.dhivakar.mysamples.orientation.OrientationsManager;
+import com.dhivakar.mysamples.externalapps.ExternalAppsManager;
 import com.dhivakar.mysamples.utils.ListenToOrientaionChanges;
 import com.dhivakar.mysamples.utils.LogUtils;
 
@@ -27,6 +28,7 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
 
         SetButtonClickListener(R.id.BtnLaunchNotifications, this, NotificationsManager.class);
         SetButtonClickListener(R.id.BtnLaunchOrientations, this, OrientationsManager.class);
+        SetButtonClickListener(R.id.BtnLaunchExternalApps, this, ExternalAppsManager.class);
 
         UpdateOrientationText(getResources().getConfiguration().orientation);
         ListenToOrientaionChanges.StartListening(this, this);

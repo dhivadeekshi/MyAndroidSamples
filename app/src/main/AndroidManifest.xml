@@ -34,8 +34,7 @@
         <activity
             android:name=".orientation.OrientationsManager"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".activity.Deeplink"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
@@ -58,6 +57,10 @@
                     android:host="dhivakar.com" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".externalapps.ExternalAppsManager"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
