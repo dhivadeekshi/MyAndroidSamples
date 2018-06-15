@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.dhivakar.mysamples.BaseAppCompatActivity;
-import com.dhivakar.mysamples.R;
+//import com.dhivakar.mysamples.R;
+import com.ubisoft.dragonfire.R;
 
 public class NotificationsManager extends BaseAppCompatActivity {
 

@@ -9,11 +9,13 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dhivakar.mysamples.googleplaygames.GPGSAchievements;
 import com.dhivakar.mysamples.notifications.NotificationsManager;
 import com.dhivakar.mysamples.orientation.OrientationsManager;
 import com.dhivakar.mysamples.externalapps.ExternalAppsManager;
 import com.dhivakar.mysamples.utils.ListenToOrientaionChanges;
 import com.dhivakar.mysamples.utils.LogUtils;
+import com.ubisoft.dragonfire.R;
 
 import org.w3c.dom.Text;
 
@@ -29,6 +31,7 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
         SetButtonClickListener(R.id.BtnLaunchNotifications, this, NotificationsManager.class);
         SetButtonClickListener(R.id.BtnLaunchOrientations, this, OrientationsManager.class);
         SetButtonClickListener(R.id.BtnLaunchExternalApps, this, ExternalAppsManager.class);
+        SetButtonClickListener(R.id.BtnLaunchGPGSAchievements, this, GPGSAchievements.class);
 
         UpdateOrientationText(getResources().getConfiguration().orientation);
         ListenToOrientaionChanges.StartListening(this, this);

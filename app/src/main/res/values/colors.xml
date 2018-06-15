@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="color_notifications">#ea7b7b</color>
     <color name="color_orientations">#d0ea7b</color>
+    <color name="color_gppsachievements">#ffffff</color>
+    <color name="color_deeplink">#5fcad6</color>
+    <color name="color_deeplink_text">#ffffff</color>
+    <color name="color_subtitle">#bcbcbc</color>
 </resources>

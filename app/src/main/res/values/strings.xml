@@ -9,4 +9,6 @@
     <string name="filter_view_http_deeplink">DeepLink filter</string>
     <string name="filter_view_mysamples_deeplink">Deeplink Filter</string>
     <string name="launch_externalapps">Launch External Apps</string>
+    <string name="gpgachievement_samples">GPGS Achievement Samples</string>
+    <string name="launch_gpgsachievements">LAUNCH GPGS ACHIEVEMENTS</string>
 </resources>

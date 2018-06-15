@@ -30,6 +30,14 @@
         android:text="@string/launch_externalapps"
         app:layout_constraintTop_toBottomOf="@id/BtnLaunchOrientations"/>
 
+    <Button
+        android:id="@+id/BtnLaunchGPGSAchievements"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5sp"
+        android:text="@string/launch_gpgsachievements"
+        app:layout_constraintTop_toBottomOf="@id/BtnLaunchExternalApps"/>
+
     <TextView
         android:id="@+id/orientation_description"
         android:layout_width="match_parent"

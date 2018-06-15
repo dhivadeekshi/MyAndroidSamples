@@ -4,11 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.Deeplink">
+    tools:context="com.dhivakar.mysamples.activity.Deeplink"
+    android:background="@color/color_deeplink">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="DEEPLINK"/>
+        android:text="DEEPLINK"
+        android:textColor="@color/color_deeplink_text"
+        android:textAlignment="center"
+        android:textSize="30sp"/>
 
 </android.support.constraint.ConstraintLayout>

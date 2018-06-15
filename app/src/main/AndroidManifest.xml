@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dhivakar.mysamples">
+    package="com.ubisoft.dragonfire">
 
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
+        android:isGame="true"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
+        <meta-data
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="\ 265464518803" />
+
         <activity
-            android:name=".MainActivity"
+            android:name="com.dhivakar.mysamples.MainActivity"
             android:configChanges="orientation|screenLayout|screenSize|density"
             android:launchMode="singleTop"
             android:screenOrientation="user">
@@ -27,40 +40,112 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".notifications.NotificationsManager"
+            android:name="com.dhivakar.mysamples.notifications.NotificationsManager"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName="com.dhivakar.mysamples.MainActivity" />
+
         <activity
-            android:name=".orientation.OrientationsManager"
+            android:name="com.dhivakar.mysamples.orientation.OrientationsManager"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".activity.Deeplink"
+            android:parentActivityName="com.dhivakar.mysamples.MainActivity" />
+
+        <activity
+            android:name="com.dhivakar.mysamples.activity.Deeplink"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.dhivakar.mysamples.MainActivity">
             <intent-filter android:label="@string/filter_view_http_deeplink">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "http://www.mysamples.com/deeplink” -->
-                <data android:scheme="http"
+                <data
                     android:host="www.mysamples.com"
-                    android:pathPrefix="/deeplink" />
-                <!-- note that the leading "/" is required for pathPrefix-->
+                    android:pathPrefix="/deeplink"
+                    android:scheme="http" />
+                <!-- note that the leading "/" is required for pathPrefix -->
             </intent-filter>
             <intent-filter android:label="@string/filter_view_mysamples_deeplink">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "mysamples://deeplink” "http://dhivakar.com"-->
-                <data android:scheme="http"
-                    android:host="dhivakar.com" />
+                <!-- Accepts URIs that begin with "mysamples://deeplink” "http://dhivakar.com" -->
+                <data
+                    android:host="dhivakar.com"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".externalapps.ExternalAppsManager"
+            android:name="com.dhivakar.mysamples.externalapps.ExternalAppsManager"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="com.dhivakar.mysamples.MainActivity" />
+
+        <activity
+            android:name="com.dhivakar.mysamples.googleplaygames.GPGSAchievements"
+            android:launchMode="singleTop"
+            android:parentActivityName="com.dhivakar.mysamples.MainActivity" />
+
+        <activity android:name="com.dhivakar.mysamples.googleplaygames.GPGSAchievementsRedirectActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName="com.dhivakar.mysamples.googleplaygames.GPGSAchievements">
+            <intent-filter> <!-- com.ubisoft.dragonfire:/oauth2callback -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="com.ubisoft.com"
+                    android:pathPrefix="/oauth2callback"
+                    android:scheme="com.ubisoft.dragonfire" />
+            </intent-filter>
+            <intent-filter> <!-- https://ubisoft.dragonfire.com/oauth2callback -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="ubisoft.dragonfire.com"
+                    android:pathPrefix="/oauth2callback"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter> <!-- https://www.google.com/oauth2callback -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.google.com"
+                    android:pathPrefix="/oauth2callback"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter> <!-- com.ubisoft.dragonfire:/oauth2callback -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.google.com"
+                    android:pathPrefix="/oauth2callback"
+                    android:scheme="com.ubisoft.dragonfire" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="com.ubisoft.dragonfire"
+                    android:host="*.googleapis.com"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

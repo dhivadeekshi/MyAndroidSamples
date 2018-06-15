@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".orientation.OrientationsManager"
+    tools:context="com.dhivakar.mysamples.orientation.OrientationsManager"
     android:background="@color/color_orientations"
     android:id="@+id/orientation">
 

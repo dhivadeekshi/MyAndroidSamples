@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dhivakar.mysamples.googleplaygames.GPGSAchievements"
+    android:background="@color/color_gppsachievements"
+    android:id="@+id/gpgachievements">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/gpgachievements_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gpgachievement_samples"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:typeface="normal"
+                app:textAllCaps="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/color_notifications">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Client Id to be used" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/buttonAndroidClientId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Android"
+                    android:onClick="onClick"/>
+
+                <RadioButton
+                    android:id="@+id/buttonWebClientId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="WEB"
+                    android:onClick="onClick" />
+
+
+                <RadioButton
+                    android:id="@+id/buttonClientId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Client"
+                    android:onClick="onClick" />
+
+
+                <RadioButton
+                    android:id="@+id/buttonAtuoGeneratedClientId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Auto Generated"
+                    android:onClick="onClick"/>
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ClientId:"
+                android:id="@+id/textSelectedClientId"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Using Rest Api"
+                android:textAlignment="center"
+                android:background="@color/color_subtitle"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonResetWebActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Web Activity"
+                    android:onClick="onClick"/>
+
+                <Button
+                    android:id="@+id/buttonAuthorizeAndReset"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="AuthCode"
+                    android:onClick="onClick"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Authorize using Google SignIn"
+                android:textAlignment="center"
+                android:background="@color/color_subtitle"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height= "wrap_content"
+                    android:text="Select Scopes"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Games"
+                        android:id="@+id/buttonRadioGames"
+                        android:onClick="onClick"/>
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Plus"
+                        android:id="@+id/buttonRadioPlus"
+                        android:onClick="onClick"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonSignIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Sign In"
+                    android:onClick="onClick"/>
+
+                <Button
+                    android:id="@+id/buttonSignOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Sign Out"
+                    android:onClick="onClick"/>
+                <!--<Button
+                    android:id="@+id/buttonSignInAuthCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Request AuthCode" />
+
+                <Button
+                    android:id="@+id/buttonSignIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Default" />-->
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AuthCode:"
+                android:id="@+id/textReceivedAuthCode"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Access Token"
+                android:textAlignment="center"
+                android:background="@color/color_subtitle"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Received token :"
+                android:id="@+id/textReceivedToken"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Refresh token :"
+                android:id="@+id/textRefreshToken"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonGetAccessToken"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Request Access Token"
+                    android:onClick="onClick"/>
+
+                <Button
+                    android:id="@+id/buttonVerifyAccessToken"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Verify Token"
+                    android:onClick="onClick"/>
+
+                <Button
+                    android:id="@+id/buttonRefreshAccessToken"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Refresh Token"
+                    android:onClick="onClick"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Reset Achievement"
+                android:textAlignment="center"
+                android:background="@color/color_subtitle"/>
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonSignInRequestScopes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Request scopes" />
+
+                <Button
+                    android:id="@+id/buttonSignInRequestCodeScopes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Request Code and Scopes" />
+            </LinearLayout>-->
+
+            <!--<Button
+                android:id="@+id/buttonSignOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LogOut GoogleSignIn" />-->
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/color_notifications">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Reset Achievement"
+                    android:id="@+id/buttonResetAllAchievements"
+                    android:onClick="onClick"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select Api Key to be used" />
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="API Key"
+                        android:onClick="onClick"
+                        android:id="@+id/buttonRadioApiKey"/>
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Server Key"
+                        android:onClick="onClick"
+                        android:id="@+id/buttonRadioServerKey"/>
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Web Key"
+                        android:onClick="onClick"
+                        android:id="@+id/buttonRadioWebKey"/>
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Android Key"
+                        android:onClick="onClick"
+                        android:id="@+id/buttonRadioAndroidKey"/>
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ApiKey:"
+                    android:id="@+id/textSelectedApiKey"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Reset Achievement Using Api Key"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:id="@+id/buttonResetUsingApiKey"/>
+
+
+            </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ClearError"
+                android:id="@+id/buttonClearError"
+                android:onClick="onClick"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Error:"
+                android:id="@+id/textErrorText"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+</android.support.constraint.ConstraintLayout>
