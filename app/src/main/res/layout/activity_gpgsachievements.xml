@@ -175,19 +175,7 @@
                     android:layout_weight="1"
                     android:text="Sign Out"
                     android:onClick="onClick"/>
-                <!--<Button
-                    android:id="@+id/buttonSignInAuthCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Request AuthCode" />
 
-                <Button
-                    android:id="@+id/buttonSignIn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Default" />-->
             </LinearLayout>
 
             <TextView
@@ -250,103 +238,14 @@
                 android:textAlignment="center"
                 android:background="@color/color_subtitle"/>
 
-            <!--<LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/buttonSignInRequestScopes"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Request scopes" />
-
-                <Button
-                    android:id="@+id/buttonSignInRequestCodeScopes"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Request Code and Scopes" />
-            </LinearLayout>-->
-
-            <!--<Button
-                android:id="@+id/buttonSignOut"
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="LogOut GoogleSignIn" />-->
+                android:text="Reset Achievement"
+                android:id="@+id/buttonResetAllAchievements"
+                android:onClick="onClick"
+                android:background="@color/color_red"/>
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/color_notifications">
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Reset Achievement"
-                    android:id="@+id/buttonResetAllAchievements"
-                    android:onClick="onClick"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Select Api Key to be used" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="API Key"
-                        android:onClick="onClick"
-                        android:id="@+id/buttonRadioApiKey"/>
-
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Server Key"
-                        android:onClick="onClick"
-                        android:id="@+id/buttonRadioServerKey"/>
-
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Web Key"
-                        android:onClick="onClick"
-                        android:id="@+id/buttonRadioWebKey"/>
-
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Android Key"
-                        android:onClick="onClick"
-                        android:id="@+id/buttonRadioAndroidKey"/>
-                </RadioGroup>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="ApiKey:"
-                    android:id="@+id/textSelectedApiKey"/>
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Reset Achievement Using Api Key"
-                    android:layout_weight="1"
-                    android:onClick="onClick"
-                    android:id="@+id/buttonResetUsingApiKey"/>
-
-
-            </LinearLayout>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

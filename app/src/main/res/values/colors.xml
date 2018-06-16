@@ -9,4 +9,5 @@
     <color name="color_deeplink">#5fcad6</color>
     <color name="color_deeplink_text">#ffffff</color>
     <color name="color_subtitle">#bcbcbc</color>
+    <color name="color_red">#ff0000</color>
 </resources>

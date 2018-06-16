@@ -64,16 +64,8 @@ public class GPGSAchievements extends BaseAppCompatActivity {
             "265464518803-m2t36itrdceppu5hig2h7n6rbjfikchg.apps.googleusercontent.com" // WebClientId Auto
     };
 
-    private static final String[] ApiKeys = {
-            "AIzaSyDb-2iXj2nFkYFm3xLkOx5Bobc6AoWuiu4", // API Key 1
-            "AIzaSyAyhJWvtOMfrbpngJHk84bZfWWEkpAtmoI", // Server Key
-            "AIzaSyBOkUjoM29IdCW56cH9Ajx28PTg-3H_mvI", // Browser Key
-            "AIzaSyBSlavlmA4jebM7Auy0NhjM7ByZlupQdGY" // Android Key
-    };
-
     private int selectedSignInMode = 0;
     private int selectedClientId = 0;
-    private int selectedApiKey = 0;
     private int selectedScopes = 0;
     private StringBuilder error = new StringBuilder();
     private String authCode;
@@ -120,15 +112,12 @@ public class GPGSAchievements extends BaseAppCompatActivity {
             case R.id.buttonSignInAuthCode: AuthorizeUsingGoogleSignIn(1); break;
             case R.id.buttonSignInRequestScopes: AuthorizeUsingGoogleSignIn(2); break;
             case R.id.buttonSignInRequestCodeScopes: AuthorizeUsingGoogleSignIn(3); break;
-            case R.id.buttonSignOut: SignOutGoogleAccount(); break;
-
-            case R.id.buttonResetUsingApiKey: ResetAllAchievements(2); break;*/
+            case R.id.buttonSignOut: SignOutGoogleAccount(); break;*/
 
             // Reset Achievement
             case R.id.buttonResetAllAchievements: ResetAchievements(); break;
             case R.id.buttonAuthorizeAndReset: ResetAllAchievements(0); break;
             case R.id.buttonResetWebActivity: ResetAllAchievements(1); break;
-            case R.id.buttonResetUsingApiKey: ResetAllAchievements(2); break;
 
             // Google SignIn
             case R.id.buttonSignIn: SignInGoogleAccount(); break;
@@ -144,12 +133,6 @@ public class GPGSAchievements extends BaseAppCompatActivity {
             case R.id.buttonWebClientId: if(((RadioButton)v).isChecked()) selectedClientId = 1; break;
             case R.id.buttonAndroidClientId: if(((RadioButton)v).isChecked()) selectedClientId = 2; break;
             case R.id.buttonAtuoGeneratedClientId: if(((RadioButton)v).isChecked()) selectedClientId = 3; break;
-
-            // Select Api Keys
-            case R.id.buttonRadioApiKey: if(((RadioButton)v).isChecked()) selectedApiKey = 0;break;
-            case R.id.buttonRadioServerKey: if(((RadioButton)v).isChecked()) selectedApiKey = 1;break;
-            case R.id.buttonRadioWebKey: if(((RadioButton)v).isChecked()) selectedApiKey = 2;break;
-            case R.id.buttonRadioAndroidKey: if(((RadioButton)v).isChecked()) selectedApiKey = 3;break;
 
             // Scopes
             case R.id.buttonRadioGames: ScopesSelected(); break;
@@ -180,13 +163,11 @@ public class GPGSAchievements extends BaseAppCompatActivity {
             @Override
             public void run() {
 
-                TextView textSelectedApiKey = (TextView) findViewById(R.id.textSelectedApiKey);
                 TextView textSelectedClient = (TextView) findViewById(R.id.textSelectedClientId);
                 TextView textReceivedAuthCode = (TextView) findViewById(R.id.textReceivedAuthCode);
                 TextView textReceivedToken = (TextView) findViewById(R.id.textReceivedToken);
                 TextView textRefreshToken = (TextView) findViewById(R.id.textRefreshToken);
 
-                textSelectedApiKey.setText("ApiKey:"+ApiKeys[selectedApiKey]);
                 textSelectedClient.setText("ClientId:"+ClientIds[selectedClientId]);
                 textReceivedAuthCode.setText("AuthCode:"+authCode);
                 textReceivedToken.setText("Access Token:"+accessToken);
@@ -725,49 +706,31 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         LogUtils.i(this, "Reset all achievements");
         final Context context = this;
 
-        if (mode == 2) {
-            // Reset achievement usign Api Key
-            HashMap<String, String> properties = new HashMap<String, String>();
-            properties.put("key", ApiKeys[selectedApiKey]); // Required
+        Authorize(mode == 0, new HTTPRequestHandler.Callback() {
+            @Override
+            public void OnRequestSuccess(String response) {
+                LogUtils.i(TAG, "Reset Achievement Authorize Success : " + response, true, context);
 
-            HTTPRequestHandler.PostRequest(ResetAchievementURL, null, properties, new HTTPRequestHandler.Callback() {
-                @Override
-                public void OnRequestSuccess(String response) {
-                    LogUtils.i(TAG, "Reset Achievements Success : " + response, true, context);
+                if (response.contains("code")) {
+                    String code = response.substring(response.indexOf("code"));
+                    LogUtils.i(TAG, "Reset Achievement Authorize Success Code: " + code, true, context);
+                    authCode = code;
+                    UpdateUITexts();
+                    //OnAuthCodeReceived(code, context);
+                } else {
+                    String error = "";
+                    if (response.contains("error"))
+                        error = response.substring(response.indexOf("error"));
+                    LogUtils.i(TAG, "Reset Achievement Authorize Failed code not found" + (error.isEmpty() ? "" : " " + error), true, context);
                 }
+            }
 
-                @Override
-                public void OnRequestFailed(String response, int responseCode) {
-                    LogUtils.e(TAG, "Reset Achievements Failed : " + responseCode+":"+response, true, context);
-                    UpdateError("Reset Achievements Failed : " + responseCode+":"+response);
-                }
-            });
-        } else {
-            Authorize(mode == 0, new HTTPRequestHandler.Callback() {
-                @Override
-                public void OnRequestSuccess(String response) {
-                    LogUtils.i(TAG, "Reset Achievement Authorize Success : " + response, true, context);
+            @Override
+            public void OnRequestFailed(String response, int responseCode) {
+                LogUtils.i(TAG, "Reset Achievement Authorize Failed : " + responseCode + ":" + response, true, context);
+                UpdateError("Reset Achievements Failed : " + responseCode + ":" + response);
+            }
+        });
 
-                    if (response.contains("code")) {
-                        String code = response.substring(response.indexOf("code"));
-                        LogUtils.i(TAG, "Reset Achievement Authorize Success Code: " + code, true, context);
-                        authCode = code;
-                        UpdateUITexts();
-                        //OnAuthCodeReceived(code, context);
-                    } else {
-                        String error = "";
-                        if (response.contains("error"))
-                            error = response.substring(response.indexOf("error"));
-                        LogUtils.i(TAG, "Reset Achievement Authorize Failed code not found" + (error.isEmpty() ? "" : " " + error), true, context);
-                    }
-                }
-
-                @Override
-                public void OnRequestFailed(String response, int responseCode) {
-                    LogUtils.i(TAG, "Reset Achievement Authorize Failed : " + responseCode+":"+response, true, context);
-                    UpdateError("Reset Achievements Failed : " + responseCode+":"+response);
-                }
-            });
-        }
     }
 }
