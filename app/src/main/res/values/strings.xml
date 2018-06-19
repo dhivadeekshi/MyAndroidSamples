@@ -11,4 +11,6 @@
     <string name="launch_externalapps">Launch External Apps</string>
     <string name="gpgachievement_samples">GPGS Achievement Samples</string>
     <string name="launch_gpgsachievements">LAUNCH GPGS ACHIEVEMENTS</string>
+    <string name="string_x">X</string>
+    <string name="app_id"> </string>
 </resources>

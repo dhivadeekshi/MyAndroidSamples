@@ -6,9 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.dhivakar.mysamples.BaseAppCompatActivity;
-//import com.dhivakar.mysamples.R;
+import com.dhivakar.mysamples.R;
 import com.dhivakar.mysamples.utils.LogUtils;
-import com.ubisoft.dragonfire.R;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;

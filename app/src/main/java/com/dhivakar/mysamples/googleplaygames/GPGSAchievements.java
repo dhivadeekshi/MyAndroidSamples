@@ -2,18 +2,27 @@ package com.dhivakar.mysamples.googleplaygames;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.dhivakar.mysamples.BaseAppCompatActivity;
-//import com.dhivakar.mysamples.R;
+import com.dhivakar.mysamples.R;
+import com.dhivakar.mysamples.activity.WebViewActivity;
 import com.dhivakar.mysamples.utils.HTTPRequestHandler;
 import com.dhivakar.mysamples.utils.LogUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,11 +38,11 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.ubisoft.dragonfire.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -44,6 +53,8 @@ public class GPGSAchievements extends BaseAppCompatActivity {
     private static final int REQUEST_CODE_SIGN_IN = 3;
     private static final int REQUEST_CODE_WEB_INTENT = 4;
     private static final int REQUEST_CODE_REQUEST_SCOPES = 5;
+    private static final int REQUEST_CODE_WEB_PAGE = 6;
+    private static final int REQUEST_CODE_SELECT_ACCOUNT_FURTHER = 7;
     private static final String ResetAchievementURL = "https://www.googleapis.com/games/v1management/achievements/reset";
     private static final String AuthorizeURLV2 = "https://accounts.google.com/o/oauth2/v2/auth";
     private static final String GetAccessTokenURLV4 = "https://www.googleapis.com/oauth2/v4/token";
@@ -77,14 +88,6 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpgsachievements);
 
-        /*SetButtonClickListener(R.id.buttonForceGetAllAccounts, this);
-        SetButtonClickListener(R.id.buttonResetAllAchievements, this);
-        SetButtonClickListener(R.id.buttonSignIn, this);
-        SetButtonClickListener(R.id.buttonSignInAuthCode, this);
-        SetButtonClickListener(R.id.buttonSignInRequestScopes, this);
-        SetButtonClickListener(R.id.buttonSignInRequestCodeScopes, this);
-        SetButtonClickListener(R.id.buttonSignOut, this);*/
-
         //ConfigureGoogleSignIn(0);
         //AttemptSilentSignIn();
         UpdateUITexts();
@@ -107,13 +110,6 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         super.onClick(v);
         switch(v.getId())
         {
-            /*
-            case R.id.buttonSignIn: AuthorizeUsingGoogleSignIn(0); break;
-            case R.id.buttonSignInAuthCode: AuthorizeUsingGoogleSignIn(1); break;
-            case R.id.buttonSignInRequestScopes: AuthorizeUsingGoogleSignIn(2); break;
-            case R.id.buttonSignInRequestCodeScopes: AuthorizeUsingGoogleSignIn(3); break;
-            case R.id.buttonSignOut: SignOutGoogleAccount(); break;*/
-
             // Reset Achievement
             case R.id.buttonResetAllAchievements: ResetAchievements(); break;
             case R.id.buttonAuthorizeAndReset: ResetAllAchievements(0); break;
@@ -122,6 +118,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
             // Google SignIn
             case R.id.buttonSignIn: SignInGoogleAccount(); break;
             case R.id.buttonSignOut: SignOutGoogleAccount(); break;
+            case R.id.buttonGetAccounts: GetAllAccounts(); break;
 
             // Access Tokens
             case R.id.buttonGetAccessToken: GetAccessToken(); break;
@@ -143,6 +140,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         }
 
         UpdateUITexts();
+        UpdateError("");
     }
 
     private void ScopesSelected()
@@ -177,6 +175,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
     }
 
     private void UpdateError(String error) {
+        if(this.error == null) this.error = new StringBuilder();
         this.error.append(error);
         final String errorToDisplay = this.error.toString();
         runOnUiThread(new Runnable() {
@@ -188,7 +187,11 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         });
     }
 
+
     private void GetAllAccounts() {
+
+
+
 
         /*Intent intent = AccountPicker.newChooseAccountIntent(null, null,
                 new String[] {"com.google", "com.google.android.legacyimap"},
@@ -204,6 +207,8 @@ public class GPGSAchievements extends BaseAppCompatActivity {
                 return;
             }
         }*/
+
+
         final Account[] accounts = AccountManager.get(this).getAccounts();
         LogUtils.i(this, "Get All Accounts : " + accounts.length);
         for (Account account : accounts)
@@ -224,6 +229,36 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         }
     }
 
+    private class OnTokenAcquired implements AccountManagerCallback<Bundle> {
+        @Override
+        public void run(AccountManagerFuture<Bundle> result) {
+            try {
+                // Get the result of the operation from the AccountManagerFuture.
+                Bundle bundle = result.getResult();
+
+                // The token is a named value in the bundle. The name of the value
+                // is stored in the constant AccountManager.KEY_AUTHTOKEN.
+                authCode = bundle.getString(AccountManager.KEY_AUTHTOKEN);
+
+                Intent launch = (Intent) result.getResult().get(AccountManager.KEY_INTENT);
+                if (launch != null) {
+                    startActivityForResult(launch, REQUEST_CODE_SELECT_ACCOUNT_FURTHER);
+                    return;
+                }
+            }catch (OperationCanceledException | IOException | AuthenticatorException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class OnError implements Handler.Callback {
+        @Override
+        public boolean handleMessage(Message msg) {
+            return false;
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -232,9 +267,17 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         LogUtils.i(this, "onActivityResult requestCode:"+requestCode+" resultCode:"+resultCode+" data:"+data+" extras:"+extras.toString());
         switch (requestCode)
         {
+            case REQUEST_CODE_SELECT_ACCOUNT_FURTHER:
+
+                // The token is a named value in the bundle. The name of the value
+                // is stored in the constant AccountManager.KEY_AUTHTOKEN.
+                authCode = extras.getString(AccountManager.KEY_AUTHTOKEN);
+                LogUtils.i(this,"onActivityResult authCode:"+authCode);
+                break;
+
             case REQUEST_CODE_SELECT_ACCOUNT:
                 LogUtils.i(this,"onActivityResult accountName:"+extras.getString("authAccount"));
-                final Account[] accounts = AccountManager.get(this).getAccounts();
+                Account[] accounts = AccountManager.get(this).getAccounts();
                 LogUtils.i(this, "Get All Accounts : " + accounts.length);
                 for (Account account : accounts)
                     LogUtils.i(this, "Get All Accounts accountName:" + account.name);
@@ -248,14 +291,46 @@ public class GPGSAchievements extends BaseAppCompatActivity {
                     }
                 }
 
+
+                AccountManager am = AccountManager.get(this);
+                Bundle options = new Bundle();
+
+                //accounts = am.getAccountsByType("com.goolge");
+
+                if(accounts != null && accounts.length > 0)
+                am.getAuthToken(
+                        accounts[0],                     // Account retrieved using getAccountsByType()
+                        Games.SCOPE_GAMES.toString(),            // Auth scope
+                        options,                        // Authenticator-specific options
+                        this,                           // Your activity
+                        new OnTokenAcquired(),          // Callback called when a token is successfully acquired
+                        new Handler(new OnError()));    // Callback called if an error occurs
+
                 break;
 
             case REQUEST_CODE_REQUEST_SCOPES:
+                GoogleSignInAccount account = GoogleSignIn.getAccountForScopes(this, Games.SCOPE_GAMES);
+                if(account != null)
+                {
+                    try{
+                        LogUtils.i(this,"onActivityResult Account received for scopes");
+                        PrintAccountDetails(account);
+                        UpdateUITexts();
+                    }
+                    catch (Exception e)
+                    {
+                        LogUtils.i(this,"onActivityResult get account for scopes failed:"+e.getMessage());
+                    }
+                }
+                else
+                    CheckAndRequestScopes();
+                break;
+
             case REQUEST_CODE_SIGN_IN:
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 try{
                     LogUtils.i(this,"onActivityResult Retrive Account");
-                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    account = task.getResult(ApiException.class);
                     LogUtils.i(this,"onActivityResult Account retrived");
                     PrintAccountDetails(account);
                     authCode = account.getServerAuthCode();
@@ -265,7 +340,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
                 {
                     if(e.getStatusCode() == 8)
                     {
-                        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+                        account = GoogleSignIn.getLastSignedInAccount(this);
                         PrintAccountDetails(account);
                         if(account != null) authCode = account.getServerAuthCode();
                     }
@@ -275,9 +350,12 @@ public class GPGSAchievements extends BaseAppCompatActivity {
                 break;
 
             case REQUEST_CODE_WEB_INTENT:
-                LogUtils.i(this,"onActivityResult Web Page opened");
+                LogUtils.i(this,"onActivityResult Web Intent opened");
                 break;
 
+            case REQUEST_CODE_WEB_PAGE:
+                LogUtils.i(this,"onActivityResult Web Page opened");
+                break;
         }
     }
 
@@ -318,8 +396,8 @@ public class GPGSAchievements extends BaseAppCompatActivity {
 
     private GoogleSignInOptions signInOptions()
     {
-        GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestServerAuthCode(ClientIds[selectedClientId], false);
+        GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+                .requestServerAuthCode(ClientIds[selectedClientId], true);
 
         switch (selectedScopes)
         {
@@ -385,6 +463,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
             PrintAccountDetails(account);
             UpdateUITexts();
         } else if (mGoogleSignInClient != null) {
+            LogUtils.i(this, "Not sigined in account. Attempt Login");
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
         }
@@ -595,7 +674,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
 
     private void GetAccessToken()
     {
-        if(!authCode.isEmpty() && !CheckAndRequestScopes()) {
+        if(!CheckAndRequestScopes() && authCode != null && !authCode.isEmpty()) {
             final Context context = this;
             GetAccessToken(authCode, new HTTPRequestHandler.Callback() {
                 @Override
@@ -702,7 +781,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         ResetAchievements();
     }
 
-    private void ResetAllAchievements(int mode) {
+    private void ResetAllAchievements(final int mode) {
         LogUtils.i(this, "Reset all achievements");
         final Context context = this;
 
@@ -711,7 +790,15 @@ public class GPGSAchievements extends BaseAppCompatActivity {
             public void OnRequestSuccess(String response) {
                 LogUtils.i(TAG, "Reset Achievement Authorize Success : " + response, true, context);
 
-                if (response.contains("code")) {
+                if(mode == 1){
+                    Intent intent = new Intent(context, WebViewActivity.class);
+                    Bundle data = new Bundle();
+                    data.putString("htmlPage", response);
+                    intent.putExtras(data);
+                    startActivityForResult(intent, REQUEST_CODE_WEB_PAGE);
+                    LogUtils.i(TAG, "Reset Achievement Authorize Success htmlPage: " + response, true, context);
+                }
+                else if (response.contains("code")) {
                     String code = response.substring(response.indexOf("code"));
                     LogUtils.i(TAG, "Reset Achievement Authorize Success Code: " + code, true, context);
                     authCode = code;

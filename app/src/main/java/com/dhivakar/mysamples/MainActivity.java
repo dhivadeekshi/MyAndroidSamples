@@ -15,7 +15,6 @@ import com.dhivakar.mysamples.orientation.OrientationsManager;
 import com.dhivakar.mysamples.externalapps.ExternalAppsManager;
 import com.dhivakar.mysamples.utils.ListenToOrientaionChanges;
 import com.dhivakar.mysamples.utils.LogUtils;
-import com.ubisoft.dragonfire.R;
 
 import org.w3c.dom.Text;
 

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ubisoft.dragonfire">
+    package="com.dhivakar.mysamples">
 
     <uses-permission
         android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22" />
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
@@ -12,6 +15,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -22,14 +26,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
         <meta-data
-            android:name="com.google.android.gms.games.APP_ID"
-            android:value="\ 265464518803" />
+            android:name="com.google.android.gms.games.APP_ID" android:value="@string/app_id" />
 
         <activity
-            android:name="com.dhivakar.mysamples.MainActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|screenLayout|screenSize|density"
             android:launchMode="singleTop"
             android:screenOrientation="user">
@@ -40,21 +41,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.dhivakar.mysamples.notifications.NotificationsManager"
+            android:name=".notifications.NotificationsManager"
             android:launchMode="singleTop"
-            android:parentActivityName="com.dhivakar.mysamples.MainActivity" />
-
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name="com.dhivakar.mysamples.orientation.OrientationsManager"
+            android:name=".orientation.OrientationsManager"
             android:launchMode="singleTop"
-            android:parentActivityName="com.dhivakar.mysamples.MainActivity" />
-
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name="com.dhivakar.mysamples.activity.Deeplink"
+            android:name=".activity.Deeplink"
             android:launchMode="singleTop"
-            android:parentActivityName="com.dhivakar.mysamples.MainActivity">
+            android:parentActivityName=".MainActivity">
             <intent-filter android:label="@string/filter_view_http_deeplink">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -78,20 +76,18 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.dhivakar.mysamples.externalapps.ExternalAppsManager"
+            android:name=".externalapps.ExternalAppsManager"
             android:launchMode="singleTop"
-            android:parentActivityName="com.dhivakar.mysamples.MainActivity" />
-
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name="com.dhivakar.mysamples.googleplaygames.GPGSAchievements"
+            android:name=".googleplaygames.GPGSAchievements"
             android:launchMode="singleTop"
-            android:parentActivityName="com.dhivakar.mysamples.MainActivity" />
-
-        <activity android:name="com.dhivakar.mysamples.googleplaygames.GPGSAchievementsRedirectActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".googleplaygames.GPGSAchievementsRedirectActivity"
             android:launchMode="singleTop"
-            android:parentActivityName="com.dhivakar.mysamples.googleplaygames.GPGSAchievements">
+            android:parentActivityName=".googleplaygames.GPGSAchievements">
             <intent-filter> <!-- com.ubisoft.dragonfire:/oauth2callback -->
                 <action android:name="android.intent.action.VIEW" />
 
@@ -142,10 +138,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="com.ubisoft.dragonfire"
-                    android:host="*.googleapis.com"/>
+                <data
+                    android:host="*.googleapis.com"
+                    android:scheme="com.ubisoft.dragonfire" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.WebViewActivity" />
     </application>
 
 </manifest>

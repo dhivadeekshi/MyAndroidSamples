@@ -4,8 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.dhivakar.mysamples.BaseAppCompatActivity;
-//import com.dhivakar.mysamples.R;
-import com.ubisoft.dragonfire.R;
+import com.dhivakar.mysamples.R;
 
 public class Deeplink extends BaseAppCompatActivity {
 
