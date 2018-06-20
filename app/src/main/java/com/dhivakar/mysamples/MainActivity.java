@@ -12,6 +12,7 @@ import com.dhivakar.mysamples.orientation.OrientationsManager;
 import com.dhivakar.mysamples.externalapps.ExternalAppsManager;
 import com.dhivakar.mysamples.utils.ListenToOrientaionChanges;
 import com.dhivakar.mysamples.utils.LogUtils;
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.Locale;
 
@@ -37,7 +38,7 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
 
         switch(v.getId())
         {
-            case R.id.buttonTestCrash: Crashlytics.getInstance().crash(); /* Force a crash*/ break;
+            case R.id.buttonTestCrash: CrashForTesting(); break;
         }
     }
 
@@ -84,6 +85,12 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
                 orientationText.setText(String.format(Locale.US, "orientation:%d", orientation));
             }
         });
+    }
+
+    private void CrashForTesting()
+    {
+        FirebaseCrash.log("App Crashed for Testing");
+        Crashlytics.getInstance().crash(); /* Force a crash */
     }
 
 }
