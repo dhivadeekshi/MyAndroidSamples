@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "15655619509-393lcpfnsjr4l8oq7s21jcbsmlo8mpjn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dhivakar.mysamples",
+            "certificate_hash": "67b8361e043190fc1d790b7411fe5637063cba88"
+          }
+        },
+        {
           "client_id": "15655619509-73a7niq26jv6prsbaft5us6jkcnvl2pr.apps.googleusercontent.com",
           "client_type": 3
         },
@@ -33,8 +41,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15655619509-73a7niq26jv6prsbaft5us6jkcnvl2pr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

@@ -37,18 +37,17 @@ dependencies {
     implementation 'com.google.android.gms:play-services-identity:15.0.1'
     // -----------
 
-    // Using ML Kit
-    implementation 'com.google.firebase:firebase-core:15.+'
-    implementation 'com.google.firebase:firebase-ml-vision:15.+'
-    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.+'
-    // -----------
-
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.0' // Firebase Core
+    implementation 'com.google.firebase:firebase-core:16.0.1' // Firebase Core
     implementation 'com.google.firebase:firebase-perf:16.0.0' // Firebase Performance
     implementation 'com.google.firebase:firebase-messaging:17.0.0' // Firebase Cloud Messaging
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4' // Crashlytics
     // ----------
+
+    // Using ML Kit
+    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
+    // -----------
 
     // Adndroid Tests
     testImplementation 'junit:junit:4.12'
