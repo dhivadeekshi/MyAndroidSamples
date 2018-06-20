@@ -1,22 +1,17 @@
 package com.dhivakar.mysamples;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.dhivakar.mysamples.googleplaygames.GPGSAchievements;
 import com.dhivakar.mysamples.notifications.NotificationsManager;
 import com.dhivakar.mysamples.orientation.OrientationsManager;
 import com.dhivakar.mysamples.externalapps.ExternalAppsManager;
 import com.dhivakar.mysamples.utils.ListenToOrientaionChanges;
 import com.dhivakar.mysamples.utils.LogUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.Locale;
 
@@ -35,6 +30,17 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
         UpdateOrientationText(getResources().getConfiguration().orientation);
         ListenToOrientaionChanges.StartListening(this, this);
     }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+
+        switch(v.getId())
+        {
+            case R.id.buttonTestCrash: Crashlytics.getInstance().crash(); /* Force a crash*/ break;
+        }
+    }
+
     @Override
     protected void onPause() {
         LogUtils.i(this, "onPause");
