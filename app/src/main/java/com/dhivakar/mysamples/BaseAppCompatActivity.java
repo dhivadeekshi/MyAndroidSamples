@@ -9,20 +9,36 @@ import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SignalStrength;
 import android.view.View;
 import android.widget.Toast;
 import android.support.design.widget.Snackbar;
 
+import com.crashlytics.android.Crashlytics;
 import com.dhivakar.mysamples.utils.LogUtils;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class BaseAppCompatActivity extends AppCompatActivity implements View.OnClickListener{
 
     protected String ClassName = "";
+    protected String TAG = "BaseAppCompatActivity";
+    protected static FirebaseAnalytics mFirebaseAnalytics;
+    private static void CreateFireBaseAnalytics(Context context)
+    {
+        // Obtain the FirebaseAnalytics instance.
+        if(mFirebaseAnalytics == null)
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
 
         ClassName = this.getClass().getSimpleName();
+        TAG = this.getClass().getSimpleName();
+        CreateFireBaseAnalytics(this);
+        LogActivityLaunch();
+        Crashlytics.log("Activity Loaded : "+ClassName);
     }
 
     @Override
@@ -131,4 +147,23 @@ public class BaseAppCompatActivity extends AppCompatActivity implements View.OnC
         intent.setData(uri);
         startActivity(intent);
     }
+
+
+    // Firebase Analytics
+    private void LogActivityLaunch()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString("activity_name",this.getClass().getSimpleName());
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
+    }
+
+    private void  LogActivityCreated()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
+    }
+    // -----------------------------
 }

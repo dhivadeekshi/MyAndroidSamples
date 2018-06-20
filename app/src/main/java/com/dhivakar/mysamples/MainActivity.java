@@ -12,7 +12,6 @@ import com.dhivakar.mysamples.orientation.OrientationsManager;
 import com.dhivakar.mysamples.externalapps.ExternalAppsManager;
 import com.dhivakar.mysamples.utils.ListenToOrientaionChanges;
 import com.dhivakar.mysamples.utils.LogUtils;
-import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.Locale;
 
@@ -89,7 +88,7 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
 
     private void CrashForTesting()
     {
-        FirebaseCrash.log("App Crashed for Testing");
+        Crashlytics.log("App Crashed for Testing");
         Crashlytics.getInstance().crash(); /* Force a crash */
     }
 

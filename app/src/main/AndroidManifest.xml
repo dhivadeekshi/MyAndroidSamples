@@ -27,7 +27,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-            android:name="com.google.android.gms.games.APP_ID" android:value="@string/app_id" />
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+
+        <service android:name=".notifications.FirebaseNotificationsService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".notifications.FirebaseCloudMessagingService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".MainActivity"
@@ -144,6 +159,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.WebViewActivity" />
+
     </application>
 
 </manifest>
