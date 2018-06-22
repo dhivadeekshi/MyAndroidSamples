@@ -69,6 +69,10 @@ public class LogUtils {
         Log.w(TAG, message);
     }
 
+    public static void w(String TAG, String message, Exception exception) {
+        Log.w(TAG, message, exception);
+    }
+
     public static void w(Object obj, String message) {
         w(getClassName(obj), message);
     }
