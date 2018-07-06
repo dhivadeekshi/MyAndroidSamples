@@ -2,10 +2,12 @@ package com.dhivakar.mysamples;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.dhivakar.mysamples.download.DownloaderActivity;
 import com.dhivakar.mysamples.googleplaygames.GPGSAchievements;
 import com.dhivakar.mysamples.notifications.NotificationsManager;
 import com.dhivakar.mysamples.orientation.OrientationsManager;
@@ -26,9 +28,27 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
         SetButtonClickListener(R.id.BtnLaunchOrientations, this, OrientationsManager.class);
         SetButtonClickListener(R.id.BtnLaunchExternalApps, this, ExternalAppsManager.class);
         SetButtonClickListener(R.id.BtnLaunchGPGSAchievements, this, GPGSAchievements.class);
+        SetButtonClickListener(R.id.BtnLaunchDownloader, this, DownloaderActivity.class);
 
         UpdateOrientationText(getResources().getConfiguration().orientation);
         ListenToOrientaionChanges.StartListening(this, this);
+
+        LogUtils.d(this, "AssetLocation"+
+                " rootDir:"+ Environment.getRootDirectory()+
+                " externalDir:"+Environment.getExternalStorageDirectory()+
+                " dataDir:"+Environment.getDataDirectory()+
+                " filesDir:"+getFilesDir()+
+                " applicationResourcePath:"+getApplication().getPackageResourcePath()+
+                " resourcePath"+getPackageResourcePath());
+
+
+        String message = "success@16182@ui_cards/buttersadv";
+        String[] messagesReceived = message.split("@");
+        for (String msg :
+                messagesReceived) {
+            LogUtils.d(this, "messagesReceived : " + msg);
+        }
+
     }
 
     @Override
