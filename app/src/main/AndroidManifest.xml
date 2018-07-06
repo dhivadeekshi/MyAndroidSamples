@@ -165,9 +165,11 @@
         </activity>
         <activity android:name=".activity.WebViewActivity" />
         <activity android:name=".googleplaygames.GPGSLogin" />
+
         <activity android:name=".cast.GoogleChromeCast"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".download.DownloaderActivity"></activity>
     </application>
 
 </manifest>

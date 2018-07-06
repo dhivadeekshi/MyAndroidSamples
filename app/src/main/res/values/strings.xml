@@ -15,4 +15,6 @@
     <string name="app_id"> </string>
     <string name="text_crash">CRASH</string>
     <string name="text_launchGoogleCast">Launch Google Chrome Cast</string>
+    <string name="downloader_samples">Downloader Samples</string>
+    <string name="launch_downloader">Launch Downloader</string>
 </resources>

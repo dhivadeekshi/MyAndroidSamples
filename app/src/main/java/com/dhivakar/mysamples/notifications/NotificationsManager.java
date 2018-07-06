@@ -28,14 +28,14 @@ public class NotificationsManager extends BaseAppCompatActivity {
 
 
         CreateNotificationChannel(defaultNotificationChannelId);
-        Button button = (Button) findViewById(R.id.send_local_notif);
+        /*Button button = (Button) findViewById(R.id.send_local_notif);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("Dhivakar","Send LocalNotification");
                 SendSampleNotification();
             }
-        });
+        });*/
     }
 
     @Override
@@ -48,7 +48,7 @@ public class NotificationsManager extends BaseAppCompatActivity {
 
     private void CreateNotificationChannel(String channelId)
     {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager mNotificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 // The id of the channel.
@@ -68,13 +68,13 @@ public class NotificationsManager extends BaseAppCompatActivity {
             mChannel.enableVibration(true);
             mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             mNotificationManager.createNotificationChannel(mChannel);
-        }
+        }*/
     }
 
     private static int notificationId = 0;
     private void SendSampleNotification()
     {
-        String body = "Sample Notification Sample asmple asample sample sample";
+        /*String body = "Sample Notification Sample asmple asample sample sample";
         Intent resultIntent = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -113,7 +113,7 @@ public class NotificationsManager extends BaseAppCompatActivity {
 				}
 			};
 			builder.extend((NotificationCompat.Extender) extender);*/
-        }
+/*        }
 
 
         if(notificationId == 0){
@@ -126,6 +126,6 @@ public class NotificationsManager extends BaseAppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if(notificationManager != null)
-            notificationManager.notify(notificationId++, builder.build());
+            notificationManager.notify(notificationId++, builder.build());*/
     }
 }
