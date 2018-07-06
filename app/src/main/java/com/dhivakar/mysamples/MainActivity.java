@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.dhivakar.mysamples.cast.GoogleChromeCast;
 import com.dhivakar.mysamples.googleplaygames.GPGSAchievements;
 import com.dhivakar.mysamples.notifications.NotificationsManager;
 import com.dhivakar.mysamples.orientation.OrientationsManager;
@@ -26,6 +27,7 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
         SetButtonClickListener(R.id.BtnLaunchOrientations, this, OrientationsManager.class);
         SetButtonClickListener(R.id.BtnLaunchExternalApps, this, ExternalAppsManager.class);
         SetButtonClickListener(R.id.BtnLaunchGPGSAchievements, this, GPGSAchievements.class);
+        SetButtonClickListener(R.id.BtnLaunchGoogleChromeCast, this, GoogleChromeCast.class);
 
         UpdateOrientationText(getResources().getConfiguration().orientation);
         ListenToOrientaionChanges.StartListening(this, this);

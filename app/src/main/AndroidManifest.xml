@@ -164,7 +164,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.WebViewActivity" />
-        <activity android:name=".googleplaygames.GPGSLogin"></activity>
+        <activity android:name=".googleplaygames.GPGSLogin" />
+        <activity android:name=".cast.GoogleChromeCast"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

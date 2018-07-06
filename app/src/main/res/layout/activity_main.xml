@@ -36,6 +36,12 @@
             android:text="@string/launch_gpgsachievements"/>
 
         <Button
+            android:id="@+id/BtnLaunchGoogleChromeCast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_launchGoogleCast" />
+
+        <Button
             android:id="@+id/buttonTestCrash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
