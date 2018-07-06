@@ -1,95 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dhivakar.mysamples.notifications.NotificationsManager">
+    tools:context=".notifications.NotificationsManager">
 
-
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/notification_samples"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:textAllCaps="false"
-        android:id="@+id/notification_title"/>
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@id"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="49dp">
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notification_samples"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textAllCaps="true"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:layout_margin="5sp">
 
-    </ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-</android.support.constraint.ConstraintLayout>-->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Basic Notification"
+                android:id="@+id/buttonNotificationBasic"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
 
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/color_notifications"
-    tools:context=".notifications.NotificationsManager">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Large Icon Notification"
+                android:id="@+id/buttonNotificationLargeIcon"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/notification_samples"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:textAllCaps="false"
-        android:id="@+id/notification_title"/>
+            </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Activity A"
-        android:id="@+id/buttonStartActivityA"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Activity B"
-        android:id="@+id/buttonStartActivityB"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Activity C"
-        android:id="@+id/buttonStartActivityC"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Activity D"
-        android:id="@+id/buttonStartActivityD"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Big Text Notification"
+                android:id="@+id/buttonNotificationBigText"
+                android:onClick="onClick"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_marginTop="10dp"
-            android:paddingLeft="5dp"
-            android:layout_width="match_parent"
-            android:id="@+id/textViewTaskInfo"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:background="#000000"/>
-    </ScrollView>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Inbox Style Notification"
+                android:id="@+id/buttonNotificationInboxStyle"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Big Picture Notification"
+                android:id="@+id/buttonNotificationBigPicture"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Progress Notification"
+                android:id="@+id/buttonNotificationProgress"
+                android:onClick="onClick"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Actions Notification"
+                android:id="@+id/buttonNotificationActions"
+                android:onClick="onClick"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show On-Going Notification"
+                android:id="@+id/buttonNotificationOnGoing"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show When in Notification"
+                android:id="@+id/buttonNotificationShowWhen"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <!--
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Basci Notification"
+                android:id="@+id/buttonNotificationBasic"
+                android:onClick="onClick"/-->
 
 
-</android.support.v7.widget.LinearLayoutCompat>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

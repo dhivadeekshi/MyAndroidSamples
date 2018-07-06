@@ -3,7 +3,6 @@ package com.dhivakar.mysamples.download;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -11,9 +10,12 @@ import android.widget.TextView;
 import com.dhivakar.mysamples.BaseAppCompatActivity;
 import com.dhivakar.mysamples.R;
 import com.dhivakar.mysamples.utils.LogUtils;
-import com.google.android.gms.auth.api.phone.SmsRetriever;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class DownloaderActivity extends BaseAppCompatActivity {
@@ -31,15 +33,15 @@ public class DownloaderActivity extends BaseAppCompatActivity {
 
         private String serverBaseURL = "";
         private String defaultDestination = "/storage/emulated/0/Android/data/com.dhivakar.mysamples/files/Assets/";
-        public boolean downaloadComplete;
+        public boolean downloadComplete;
         public boolean downloadSuccess;
 
         public DownloaderInfo(String fileUrl, String fileName, String destination)
         {
             this.fileUrl = !fileUrl.isEmpty() ? fileUrl : serverBaseURL + fileName;
             this.fileName = fileName;
-            this.destination = destination;
-            this.downaloadComplete = false;
+            this.destination = destination.isEmpty() ? defaultDestination : destination;
+            this.downloadComplete = false;
             this.downloadSuccess = false;
         }
 
@@ -48,7 +50,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
             this.fileName = fileName;
             this.fileUrl = serverBaseURL + fileName;
             this.destination = defaultDestination;
-            this.downaloadComplete = false;
+            this.downloadComplete = false;
             this.downloadSuccess = false;
         }
     }
@@ -60,11 +62,11 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_downloader);
 
         instance = this;
-        PopuplateDownloaderInfo();
+        PopulateDownloaderInfo();
         UpdateDownloadCountUI();
     }
 
-    private void PopuplateDownloaderInfo()
+    private void PopulateDownloaderInfo()
     {
         if(downloaderInfos == null) downloaderInfos = new ArrayList<>();
 
@@ -74,22 +76,62 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         // SecondDownload.txt
         // SecondDownload.json
         // SecondDownload_Android.json
-        String[] filesToDownload = LoadFileToDownload("res/downloadinfo/FirstDownload.txt");
-        LogUtils.d(this, "Loaded Files to download : "+(filesToDownload != null ? filesToDownload.length : 0));
+        ArrayList<String> server = LoadFileToDownload(R.raw.serverurl);
+        String serverurl = server != null && !server.get(0).isEmpty() ? server.get(0) : "";
 
-        if(downloaderFiles != null)
-            for (String fileName :
-                    downloaderFiles) {
-                downloaderInfos.add(new DownloaderInfo(fileName));
+        PopulateSecondDownload(serverurl);
+        PopulateSecondDownload(serverurl);
+    }
+
+    private void PopulateFirstDownload(String serverurl)
+    {
+        PopulateDownloaderInfo(serverurl, R.raw.downloadlist);
+    }
+
+    private void PopulateSecondDownload(String serverurl)
+    {
+        PopulateDownloaderInfo(serverurl, R.raw.seconddownload);
+    }
+
+    private void PopulateDownloaderInfo(String serverurl, int fileId)
+    {
+        ArrayList<String> filesDownloadList = LoadFileToDownload(fileId);
+        LogUtils.d(this, "Loaded Files to download from raw resource : "+(filesDownloadList != null ? filesDownloadList.size() : 0));
+        if(filesDownloadList != null && !serverurl.isEmpty())
+        {
+            for(String fileName :
+                    filesDownloadList) {
+                //LogUtils.d(this, "filesToDownload : "+fileName);
+                downloaderInfos.add(new DownloaderInfo(serverurl+fileName, fileName, ""));
             }
+        }
     }
 
     private String[] LoadFileToDownload(String fileName)
     {
-        String resourcePath = getPackageResourcePath()+"/"+fileName;
+        String resourcePath = getPackageResourcePath();
         File file = new File(resourcePath, fileName);
-        LogUtils.d(this,"LoadFileToDownload resourcePath = "+resourcePath+" isExists?"+file.exists());
+        LogUtils.d(this,"LoadFileToDownload resourcePath = "+file+" isExists?"+file.exists());
         return null;
+    }
+
+    private ArrayList<String> LoadFileToDownload(int fileId)
+    {
+        InputStream inputStream = getResources().openRawResource(fileId);
+
+        InputStreamReader inputreader = new InputStreamReader(inputStream);
+        BufferedReader buffreader = new BufferedReader(inputreader);
+        String line;
+        ArrayList<String> downloadList = new ArrayList<>();
+
+        try {
+            while (( line = buffreader.readLine()) != null) {
+                downloadList.add(line);
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return downloadList;
     }
 
     private void UpdateDownloadCountUI()
@@ -153,7 +195,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
                     for (DownloaderInfo download :
                             downloaderInfos) {
                         download.downloadSuccess = false;
-                        download.downaloadComplete = false;
+                        download.downloadComplete = false;
                         download.fileReference = downloadManager.StartDownload(download.fileUrl, download.fileName, download.destination);
                         downloadingCount++;
                         UpdateDownloadCountUI();
@@ -189,7 +231,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
                 for (DownloaderInfo download :
                         downloaderInfos) {
                     if (download.fileReference == fileReference) {
-                        download.downaloadComplete = true;
+                        download.downloadComplete = true;
                         download.downloadSuccess = status;
                         downloadManager.CancelDownload(fileReference);
                         if(status) downloadCompletedCount++;
@@ -204,9 +246,4 @@ public class DownloaderActivity extends BaseAppCompatActivity {
             LogUtils.e(this, "onDownloadComplete exception:" + e.getMessage());
         }
     }
-
-
-
-    private String[] downloaderFiles = {
-    };
 }
