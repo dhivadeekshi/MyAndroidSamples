@@ -92,6 +92,11 @@ public class NativeDownloadManager {
 
     public long StartDownload(String fileUrl, String fileName, String destination) {
 
+        /*m_dlcDownloadSize	 = dlcDownloadedSize;
+        m_dlcSize			 = dlcSize;
+        m_fileDownloadedSize = 0;
+        m_fileSize		 = 0;*/
+
         FetchDownloadManger();
 
         FileDownloader downloader = new FileDownloader(m_downloadManager, getDestinationFolder());
@@ -100,6 +105,10 @@ public class NativeDownloadManager {
 
         /*if(downloaders.size() == 1)
             registerBroadcastReceivers();*/
+
+
+        /*if(m_isAppInBackground && m_canShowDownloadPogress)
+            displayProgressNotification();*/
 
         LogDebug("DownloadStarted fileUrl:" + fileUrl+" fileName:"+fileName+" destination:"+destination+" fileReference:"+downloader.m_fileReference);
         return downloader.m_fileReference;
@@ -338,4 +347,137 @@ public class NativeDownloadManager {
         }
         return null;
     }
+
+/*
+	public static final int PROGRESSBAR_ID	= 555;
+	public static final String CHANNEL_ID = "downloads";
+	//Variables used to display total dlc download Progress in notification bar
+	long m_dlcSize = 0; // Get from total size of all files
+	long m_dlcDownloadSize = 0; // Get from total downloaded size
+	long m_fileDownloadedSize = 0; // Get from current downloaded size
+	long m_fileSize = 0; // Get from current max file size
+	boolean m_isDownloadCompleted = false; // True when download complete for the file
+	static boolean m_isAppInBackground = false;
+	static boolean m_canShowDownloadPogress = false;
+    void displayProgressNotification()
+    {
+        final NotificationManager mNotificationManager = (NotificationManager) CustomNativeActivity.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent intent1 = new Intent(CustomNativeActivity.getAppContext(), CustomNativeActivity.class);
+        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(CustomNativeActivity.getAppContext(), 111, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final NotificationCompat.Builder mCompatBuilder;
+        final Notification.Builder mBuilder;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            mCompatBuilder = null;
+            //Create notification Channel
+            int importance = NotificationManager.IMPORTANCE_LOW;		//IMPORTANCE_LOW makes notification to be triggred silently
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, "My Samples", importance);
+            mChannel.setDescription("Downloading Contents");
+            mChannel.enableLights(true);
+            //mChannel.enableVibration(true);
+            //mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            mNotificationManager.createNotificationChannel(mChannel);
+
+            mBuilder = new Notification.Builder(CustomNativeActivity.getAppContext(), CHANNEL_ID);
+
+            mBuilder.setContentTitle("My Samples");
+            mBuilder.setContentText(CustomNativeActivity.getAppContext().getString(R.string.dlc_progressbar_notif_desc));
+            mBuilder.setContentIntent(pendingIntent);
+            mBuilder.setSmallIcon(R.drawable.ic_stat_notify);
+            mBuilder.setChannelId(CHANNEL_ID);
+            mBuilder.setAutoCancel(true);
+        }
+        else
+        {
+            mBuilder = null;
+            mCompatBuilder = new NotificationCompat.Builder(CustomNativeActivity.getAppContext());
+            mCompatBuilder.setContentTitle("My Samples")
+                    .setContentText(CustomNativeActivity.getAppContext().getString(R.string.dlc_progressbar_notif_desc))
+                    .setSmallIcon(R.drawable.ic_stat_notify)
+                    .setContentIntent(pendingIntent);
+        }
+        // Start a lengthy operation in a background thread
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            while(m_fileDownloadedSize <= 0 && !m_isDownloadCompleted && m_isAppInBackground)
+                            {
+                                Thread.sleep(100);
+                                getDownloadedSize();
+                            }
+                        } catch (InterruptedException e)
+                        {
+                            Log.d(TAG, "sleep failure");
+                        }
+
+                        //Log.d(TAG, "THREAD Run start " + m_fileDownloadedSize + "/" + m_fileSize);
+
+                        while(m_fileDownloadedSize < m_fileSize && !m_isDownloadCompleted && m_isAppInBackground)
+                        {
+                            try
+                            {
+                                getDownloadedSize();
+                                int dlcPercentDone = (int)((m_dlcDownloadSize + m_fileDownloadedSize) / (float)m_dlcSize * 100);
+
+                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                                {
+                                    mBuilder.setProgress(100, dlcPercentDone, false);
+                                    mNotificationManager.notify(PROGRESSBAR_ID, mBuilder.build());
+                                }
+                                else
+                                {
+                                    mCompatBuilder.setProgress(100, dlcPercentDone, false);
+                                    mCompatBuilder.setAutoCancel(true);
+                                    mNotificationManager.notify(PROGRESSBAR_ID, mCompatBuilder.build());
+                                }
+
+                                Thread.sleep(1000);
+
+                            } catch (InterruptedException e)
+                            {
+                                Log.d(TAG, "sleep failure");
+                            }
+                        }
+                    }
+                }
+        ).start();
+    }
+
+	public static void cancelProgressBar(boolean isDlcFinished)
+	{
+		final NotificationManager mNotificationManager = (NotificationManager) CustomNativeActivity.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(NativeDownloadManager.PROGRESSBAR_ID);
+
+		if(isDlcFinished)
+			m_canShowDownloadPogress = false;	//Reset after DLC finishes
+	}
+
+	public void onPause()
+	{
+		m_isAppInBackground = true;
+		if(m_canShowDownloadPogress)
+			displayProgressNotification();
+	}
+
+	public void onResume()
+	{
+		if(m_isAppInBackground == true)
+		{
+			m_isAppInBackground = false;
+			cancelProgressBar(false);
+		}
+	}
+
+	public static void showProgressBar(boolean canShow)
+	{
+		m_canShowDownloadPogress = canShow;
+	}*/
 }
