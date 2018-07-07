@@ -3,14 +3,23 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'io.fabric'
 
+def buildProperties = new Properties()
 android {
+    signingConfigs {
+        release {
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+            storeFile file(RELEASE_KEY_PATH)
+            storePassword RELEASE_KEY_PASSWORD
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.dhivakar.mysamples"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -22,21 +31,20 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     // Android Support
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:mediarouter-v7:27.1.1' // Google Cast
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     // -----------
-
     // Google Play Services
     implementation 'com.google.android.gms:play-services-basement:15.0.1'
     implementation 'com.google.android.gms:play-services-games:15.0.1'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'com.google.android.gms:play-services-identity:15.0.1'
+    implementation 'com.google.android.gms:play-services-cast-framework:15.0.1' // Google Cast
     // -----------
-
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.1' // Firebase Core
     implementation 'com.google.firebase:firebase-perf:16.0.0' // Firebase Performance
@@ -44,13 +52,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.2' // Firebase Authentication
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4' // Crashlytics
     // ----------
-
     // Using ML Kit
     implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
     // -----------
-
-    // Adndroid Tests
+    // Android Tests
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
