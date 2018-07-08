@@ -18,6 +18,37 @@
             android:textSize="30sp"
             android:textStyle="bold"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Files to Download"/>
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Default"
+                android:id="@+id/radioButtonDefault"
+                android:layout_weight="1"
+                android:onClick="onClick"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="FirstDownload"
+                android:id="@+id/radioButtonFirstDownload"
+                android:layout_weight="1"
+                android:onClick="onClick"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SecondDownload"
+                android:id="@+id/radioButtonSecondDownload"
+                android:layout_weight="1"
+                android:onClick="onClick"/>
+
+        </RadioGroup>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

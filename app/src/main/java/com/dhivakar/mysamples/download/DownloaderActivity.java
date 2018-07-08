@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.dhivakar.mysamples.BaseAppCompatActivity;
@@ -62,14 +63,24 @@ public class DownloaderActivity extends BaseAppCompatActivity {
     }
 
     private ArrayList<DownloaderInfo> downloaderInfos = new ArrayList<>();
+    private String serverurl = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_downloader);
 
         instance = this;
+
+        SetDefaultUI();
+        FetchServerUrl();
         PopulateDownloaderInfo();
-        UpdateDownloadCountUI();
+        UpdateUI();
+    }
+
+    private void FetchServerUrl()
+    {
+        ArrayList<String> server = LoadFileToDownload(R.raw.serverurl);
+        serverurl = server != null && !server.get(0).isEmpty() ? server.get(0) : "";
     }
 
     private void PopulateDownloaderInfo()
@@ -82,12 +93,20 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         // SecondDownload.txt
         // SecondDownload.json
         // SecondDownload_Android.json
-        ArrayList<String> server = LoadFileToDownload(R.raw.serverurl);
-        String serverurl = server != null && !server.get(0).isEmpty() ? server.get(0) : "";
 
-        //PopulateFirstDownload(serverurl);
-        //PopulateSecondDownload(serverurl);
-        PopulateDownloaderInfo(serverurl, R.raw.downloadlist);
+        downloaderInfos = new ArrayList<>();
+        // Populate as per the toggle selected
+        switch (downloadFilesIndex) {
+            case 1: // firstDownload
+                PopulateFirstDownload(serverurl);
+                break;
+            case 2: // secondDownload
+                PopulateSecondDownload(serverurl);
+                break;
+            default:
+                PopulateDownloaderInfo(serverurl, R.raw.downloadlist);
+                break;
+        }
     }
 
     private void PopulateFirstDownload(String serverurl)
@@ -141,7 +160,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         return downloadList;
     }
 
-    private void UpdateDownloadCountUI()
+    private void UpdateUI()
     {
         runOnUiThread(new Runnable() {
             @Override
@@ -171,6 +190,12 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         });
     }
 
+    private void SetDefaultUI()
+    {
+        RadioButton defaultDownload = (RadioButton) findViewById(R.id.radioButtonDefault);
+        defaultDownload.setChecked(true);
+    }
+
     @Override
     public void onClick(View v) {
         super.onClick(v);
@@ -179,7 +204,18 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         {
             case R.id.buttonStartDownload: StartDownload(); break;
             case R.id.buttonCancelDownload: CancelDownload(); break;
+
+            case R.id.radioButtonDefault: SetDownloadIndex(v, 0); break;
+            case R.id.radioButtonFirstDownload: SetDownloadIndex(v, 1); break;
+            case R.id.radioButtonSecondDownload: SetDownloadIndex(v, 2); break;
         }
+    }
+
+    private int downloadFilesIndex = 0;
+    private void SetDownloadIndex(View radioView, int index) {
+        if(((RadioButton)radioView).isChecked())
+            downloadFilesIndex = index;
+        LogUtils.d(this, "SetDownloadIndex : "+((RadioButton)radioView).getText());
     }
 
     NativeDownloadManager downloadManager = null;
@@ -189,10 +225,13 @@ public class DownloaderActivity extends BaseAppCompatActivity {
             return;
         if(downloadManager == null)
             downloadManager = new NativeDownloadManager();
+
+        PopulateDownloaderInfo();
+
         downloadingCount = 0;
         downloadCompletedCount = 0;
         downloadFailedCount = 0;
-        UpdateDownloadCountUI();
+        UpdateUI();
 
         if(downloaderInfos != null)
         {
@@ -204,9 +243,9 @@ public class DownloaderActivity extends BaseAppCompatActivity {
                         download.downloadSuccess = false;
                         download.downloadComplete = false;
                         download.fileReference = downloadManager.StartDownload(download.fileUrl, download.fileName, download.destination);
-                        LogUtils.d("DownloadSize","downloadSize = "+downloadManager.GetDownloadedSize(download.fileReference)+" fileSize:"+downloadManager.GetFileSize(download.fileReference) );
+                        //LogUtils.d("DownloadSize","downloadSize = "+downloadManager.GetDownloadedSize(download.fileReference)+" fileSize:"+downloadManager.GetFileSize(download.fileReference) );
                         downloadingCount++;
-                        UpdateDownloadCountUI();
+                        UpdateUI();
                     }
                 }
             }).start();
@@ -216,7 +255,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
     private void CancelDownload()
     {
         downloadingCount = 0;
-        UpdateDownloadCountUI();
+        UpdateUI();
         if(downloadManager != null && downloaderInfos != null)
         {
             for (DownloaderInfo download :
@@ -245,7 +284,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
                         if(status) downloadCompletedCount++;
                         else downloadFailedCount++;
                         downloadingCount--;
-                        UpdateDownloadCountUI();
+                        UpdateUI();
                         break;
                     }
                 }
