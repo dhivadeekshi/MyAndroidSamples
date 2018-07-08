@@ -169,7 +169,9 @@
         <activity android:name=".cast.GoogleChromeCast"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".download.DownloaderActivity"></activity>
+        <activity android:name=".download.DownloaderActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

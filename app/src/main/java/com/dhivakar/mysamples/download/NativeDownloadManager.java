@@ -135,6 +135,14 @@ public class NativeDownloadManager {
         return downloadedSize;
     }
 
+    public long GetFileSize(long fileReference) {
+        //LogDebug("GetFileSize fileReference:" + fileReference);
+        long fileSize = 0;
+        FileDownloader downloader = GetFileDownloaderFor(fileReference);
+        if (downloader != null) fileSize = downloader.GetFileSize();
+        return fileSize;
+    }
+
     /*
      * Register download broadcast receiver
      */

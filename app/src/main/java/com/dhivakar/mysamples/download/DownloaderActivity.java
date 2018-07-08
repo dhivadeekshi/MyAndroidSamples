@@ -25,6 +25,10 @@ public class DownloaderActivity extends BaseAppCompatActivity {
     private int downloadCompletedCount= 0;
     private int downloadFailedCount = 0;
 
+    // Download Progress
+    private int downloadProgressMax = 0;
+    private int downloadProgress = 0;
+
     private class DownloaderInfo {
         public String fileUrl;
         public String fileName;
@@ -35,6 +39,8 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         private String defaultDestination = "/storage/emulated/0/Android/data/com.dhivakar.mysamples/files/Assets/";
         public boolean downloadComplete;
         public boolean downloadSuccess;
+
+        private int fileSize = 0;
 
         public DownloaderInfo(String fileUrl, String fileName, String destination)
         {
@@ -79,13 +85,14 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         ArrayList<String> server = LoadFileToDownload(R.raw.serverurl);
         String serverurl = server != null && !server.get(0).isEmpty() ? server.get(0) : "";
 
-        PopulateSecondDownload(serverurl);
-        PopulateSecondDownload(serverurl);
+        //PopulateFirstDownload(serverurl);
+        //PopulateSecondDownload(serverurl);
+        PopulateDownloaderInfo(serverurl, R.raw.downloadlist);
     }
 
     private void PopulateFirstDownload(String serverurl)
     {
-        PopulateDownloaderInfo(serverurl, R.raw.downloadlist);
+        PopulateDownloaderInfo(serverurl, R.raw.firstdownload);
     }
 
     private void PopulateSecondDownload(String serverurl)
@@ -197,6 +204,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
                         download.downloadSuccess = false;
                         download.downloadComplete = false;
                         download.fileReference = downloadManager.StartDownload(download.fileUrl, download.fileName, download.destination);
+                        LogUtils.d("DownloadSize","downloadSize = "+downloadManager.GetDownloadedSize(download.fileReference)+" fileSize:"+downloadManager.GetFileSize(download.fileReference) );
                         downloadingCount++;
                         UpdateDownloadCountUI();
                     }

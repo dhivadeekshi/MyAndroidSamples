@@ -1,20 +1,11 @@
 package com.dhivakar.mysamples.notifications;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Switch;
 
 import com.dhivakar.mysamples.BaseAppCompatActivity;
 import com.dhivakar.mysamples.R;
@@ -48,7 +39,7 @@ public class NotificationsManager extends BaseAppCompatActivity {
             case R.id.buttonNotificationActions: ShowNotificationWithActions(); break;
             case R.id.buttonNotificationProgress: ShowNotificationWithProgress(); break;
             case R.id.buttonNotificationOnGoing: ShowOnGoingNotification(); break;
-            case R.id.buttonNotificationShowWhen: ShowWhenInNotification(); break;
+            case R.id.buttonNotificationDisableWhen: DisableWhenInNotification(); break;
             default:
                 break;
 
@@ -124,23 +115,94 @@ public class NotificationsManager extends BaseAppCompatActivity {
                 NotificationHelper.SMALL_ICON_DEFAULT,
                 NotificationHelper.CHANNEL_ID_DEFAULT,
                 this);
-        //NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_launcher_background,"Action Title",null);
-        builder.addAction(R.mipmap.ic_launcher,"Proceed",null);
-        builder.addAction(R.mipmap.ic_launcher,"Cancel",null);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH)
+        {
+            // Adding action using NotificationCompat.Action was only introduced in Api level 20
+            builder.addAction(new NotificationCompat.Action(R.mipmap.ic_launcher,"Proceed",null));
+            builder.addAction(new NotificationCompat.Action(R.mipmap.ic_launcher,"Cancel",null));
+        }
+        else {
+            builder.addAction(R.mipmap.ic_launcher, "Proceed", null);
+            builder.addAction(R.mipmap.ic_launcher, "Cancel", null);
+        }
         NotificationHelper.PublishNotification(this, builder, 0);
     }
 
-    private void ShowNotificationWithProgress()
+    private int notificationIdProgress = 999;
+    private int notificationProgressMax = 100;
+    private int notificationProgress = 0;
+    boolean useBuilder = false;
+    private NotificationCompat.Builder builder = null;
+    private Thread notificationProgressThread = null;
+
+    private Thread CreateNotificationProgressThread() {
+
+        return new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (notificationProgress < notificationProgressMax) {
+                        ShowNotificationWithProgress(notificationProgressMax, notificationProgress, notificationProgress == 0);
+                        notificationProgress++;
+                        Thread.sleep(1000); // Execute every 1 sec
+                    }
+                    if (notificationProgress == notificationProgressMax)
+                        ShowNotificationWithProgressCompleted();
+                } catch (InterruptedException e) {
+
+                }
+            }
+        });
+    }
+
+    private void ShowNotificationWithProgress(int max, int progress, boolean intermediate) {
+        if(!useBuilder || builder == null) {
+            NotificationHelper.CreateProgressNotification(
+                    "Progress",
+                    "Sample notification to show progress in notification works",
+                    NotificationHelper.SMALL_ICON_DEFAULT,
+                    max,
+                    progress,
+                    intermediate,
+                    NotificationHelper.CHANNEL_ID_DEFAULT,
+                    this,
+                    notificationIdProgress);
+        }
+        else {
+            builder.setProgress(max, progress, intermediate);
+            NotificationHelper.PublishNotification(this, builder, notificationIdProgress);
+        }
+    }
+
+    private void ShowNotificationWithProgressCompleted()
     {
-        NotificationHelper.CreateProgressNotification(
+        NotificationHelper.CreateBigTextNotification(
                 "Progress",
-                "Sample notification to show how to show progress in notifications",
+                "Sample notification to show show progress works completed",
                 NotificationHelper.SMALL_ICON_DEFAULT,
-                100,
-                37,
-                false,
                 NotificationHelper.CHANNEL_ID_DEFAULT,
-                this);
+                this,
+                notificationIdProgress);
+    }
+
+    private void ShowNotificationWithProgress() {
+        if (notificationProgressThread != null &&
+                notificationProgressThread.isAlive() &&
+                !notificationProgressThread.isInterrupted())
+            notificationProgressThread.interrupt();
+
+        notificationProgress = 0;
+        if (useBuilder) {
+            builder = NotificationHelper.CreateNotification(
+                    "Progress",
+                    "Showing progress",
+                    NotificationHelper.SMALL_ICON_DEFAULT,
+                    NotificationHelper.CHANNEL_ID_DEFAULT,
+                    this);
+        }
+
+        notificationProgressThread = CreateNotificationProgressThread();
+        notificationProgressThread.start();
     }
 
     private void ShowOnGoingNotification()
@@ -159,11 +221,11 @@ public class NotificationsManager extends BaseAppCompatActivity {
         NotificationHelper.PublishNotification(this, builder, 0);
     }
 
-    private void ShowWhenInNotification()
+    private void DisableWhenInNotification()
     {
         NotificationCompat.Builder builder = NotificationHelper.CreateNotification(
-                "Ongoing",
-                "Sample notification to the shows when along with the notification",
+                "DisableWhen",
+                "Sample notification for which the time stamp is disabled and colored red",
                 NotificationHelper.SMALL_ICON_DEFAULT,
                 NotificationHelper.CHANNEL_ID_DEFAULT,
                 this);

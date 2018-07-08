@@ -30,21 +30,29 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Show Basic Notification"
-                android:id="@+id/buttonNotificationBasic"
-                android:onClick="onClick"
-                android:layout_weight="1"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Show Basic Notification"
+                    android:id="@+id/buttonNotificationBasic"
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Show Large Icon Notification"
-                android:id="@+id/buttonNotificationLargeIcon"
-                android:onClick="onClick"
-                android:layout_weight="1"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Show Large Icon Notification"
+                    android:id="@+id/buttonNotificationLargeIcon"
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Show User Icon Notification"
+                    android:id="@+id/buttonNotificationUserIcon"
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
 
             </LinearLayout>
 
@@ -60,21 +68,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Show Inbox Style Notification"
-                android:id="@+id/buttonNotificationInboxStyle"
-                android:onClick="onClick"
-                android:layout_weight="1"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Show Inbox Style Notification"
+                    android:id="@+id/buttonNotificationInboxStyle"
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Show Big Picture Notification"
-                android:id="@+id/buttonNotificationBigPicture"
-                android:onClick="onClick"
-                android:layout_weight="1"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Show Big Picture Notification"
+                    android:id="@+id/buttonNotificationBigPicture"
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
 
             </LinearLayout>
 
@@ -97,21 +105,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Show On-Going Notification"
-                android:id="@+id/buttonNotificationOnGoing"
-                android:onClick="onClick"
-                android:layout_weight="1"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Show On-Going Notification"
+                    android:id="@+id/buttonNotificationOnGoing"
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Show When in Notification"
-                android:id="@+id/buttonNotificationShowWhen"
-                android:onClick="onClick"
-                android:layout_weight="1"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Disable When in Notification"
+                    android:id="@+id/buttonNotificationDisableWhen"
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
 
             </LinearLayout>
 

@@ -115,6 +115,35 @@ public class FileDownloader {
         return downloadedSize;
     }
 
+    public long GetFileSize() {
+        long fileSize = 0;
+
+        try {
+
+            // Create a query to fetch the download info for the respective file
+            DownloadManager.Query downloadQuery = new DownloadManager.Query();
+            downloadQuery.setFilterById(m_fileReference);
+
+            // Fetch info using the query
+            Cursor cursor = m_downloadManager.query(downloadQuery);
+            if (cursor != null && cursor.moveToFirst()) {
+
+                //get Column for total file size
+                int sizeSoFarIndex = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
+                if(sizeSoFarIndex != -1) fileSize = cursor.getLong(sizeSoFarIndex);            //this method throws an exception when the column value is null
+
+                cursor.close();
+            } else {
+                LogError("GetFile size failed download not found fileReference:"+m_fileReference+" fileName:"+m_fileName);
+            }
+
+        } catch (Exception e) {
+            LogError("GetFile size failed for fileReference:"+m_fileReference+" fileName:"+m_fileName+" with exception " + e.getMessage());
+        }
+
+        return fileSize;
+    }
+
     private void deleteFileIfExists(String fileName) {
         if (m_destinationPath != null) {
             try {
