@@ -2,6 +2,7 @@ package com.dhivakar.mysamples;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.telephony.SignalStrength;
 import android.view.View;
 import android.widget.Toast;
 import android.support.design.widget.Snackbar;
+import android.widget.Toolbar;
 
 import com.crashlytics.android.Crashlytics;
 import com.dhivakar.mysamples.utils.LogUtils;
@@ -94,6 +96,33 @@ public class BaseAppCompatActivity extends AppCompatActivity implements View.OnC
         if(findViewById(buttonId) != null)
         {
             findViewById(buttonId).setOnClickListener(onClick);
+        }
+    }
+
+    protected void UpdateActivityHeader(String header)
+    {
+        UpdateActivityHeader(header, "");
+    }
+
+    protected void UpdateActivityHeader(String header, String subTitle)
+    {
+        try {
+            getSupportActionBar().setTitle(header);
+            getSupportActionBar().setSubtitle(subTitle);
+        }catch (NullPointerException e){
+
+        }
+    }
+
+    protected void UpdateActivityHeader(String header, String subTitle, Color color)
+    {
+        try {
+            getSupportActionBar().setTitle(header);
+            getSupportActionBar().setSubtitle(subTitle);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.image_android_versions));
+        }catch (NullPointerException e){
+
         }
     }
 

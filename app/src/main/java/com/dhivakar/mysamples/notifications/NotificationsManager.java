@@ -17,6 +17,7 @@ public class NotificationsManager extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications_manager);
+        UpdateActivityHeader(getString(R.string.notification_samples));
     }
 
     @Override

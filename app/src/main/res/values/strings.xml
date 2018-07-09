@@ -17,4 +17,5 @@
     <string name="text_launchGoogleCast">Launch Google Chrome Cast</string>
     <string name="downloader_samples">Downloader Samples</string>
     <string name="launch_downloader">Launch Downloader</string>
+    <string name="externalapps_samples">External Apps Samples</string>
 </resources>

@@ -19,6 +19,7 @@ public class OrientationsManager extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orientations_manager);
+        UpdateActivityHeader(getString(R.string.orientation_samples));
 
         SetButtonClickListener(R.id.buttonForcePortrait, this);
         SetButtonClickListener(R.id.buttonForceLandscape, this);

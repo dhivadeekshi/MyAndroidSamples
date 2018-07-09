@@ -90,6 +90,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
 
         //ConfigureGoogleSignIn(0);
         //AttemptSilentSignIn();
+        UpdateActivityHeader(getString(R.string.gpgachievement_samples));
         UpdateUITexts();
     }
 

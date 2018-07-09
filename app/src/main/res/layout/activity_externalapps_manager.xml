@@ -8,21 +8,9 @@
     android:background="@color/color_orientations"
     android:id="@+id/orientation">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/orientation_samples"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:textAllCaps="false"
-        android:id="@+id/orientation_title"/>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/orientation_title"
         android:text="Force Portrait"
         android:id="@+id/buttonForcePortrait"/>
 
