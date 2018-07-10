@@ -22,6 +22,7 @@ public class NativeDownloadManager {
     private static final String TAG = "Dhivakar";// "D_MANAGER";
     private ArrayList<FileDownloader> downloaders = new ArrayList<>();
     private DownloadManager m_downloadManager;
+    private boolean isApplicationPaused = false;
 
     // Update based on your project
     private static final String CALLBACK_GAMEOBJECT_NAME = "NativeAssetFileDownloadJobListener";
@@ -33,7 +34,7 @@ public class NativeDownloadManager {
     private void OnNotificationClicked(Context context)
     {
         LogDebug("NotificationClickedReceiver onReceive");
-        Intent launchIntent = new Intent(context, MainActivity.class);
+        Intent launchIntent = new Intent(context, DownloaderActivity.class);
         launchIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(launchIntent);
     }
@@ -48,28 +49,71 @@ public class NativeDownloadManager {
         LogUtils.d(TAG, message);
     }
 
-    private void onDownloadComplete(long fileReference)
+    private void onDownloadComplete(final long fileReference)
     {
-        FileDownloader downloader = GetFileDownloaderFor(fileReference);
+        final FileDownloader downloader = GetFileDownloaderFor(fileReference);
         if(downloader !=null) downloader.OnDownloadCompleted(true);
 
-        String fileName = downloader != null ? "@"+downloader.m_fileName : "";
-        LogDebug("onDownloadComplete  fileReference:"+fileReference+ "- success@"+fileReference+fileName);
-        ((DownloaderActivity)DownloaderActivity.instance).onDownloadComplete("success@"+fileReference+fileName);
-        //UnityMessageUtils.sendMessageToUnity(CALLBACK_GAMEOBJECT_NAME,CALLBACK_COMPLETE_FUNCTION_NAME, "success|"+fileReference+fileName);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (isApplicationPaused) {
+                            Thread.sleep(1000);
+                        }
+
+                        String fileName = downloader != null ? "@" + downloader.m_fileName : "";
+                        LogDebug("onDownloadComplete  fileReference:" + fileReference + "- success@" + fileReference + fileName);
+                        ((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete("success@" + fileReference + fileName);
+                        //UnityMessageUtils.sendMessageToUnity(CALLBACK_GAMEOBJECT_NAME,CALLBACK_COMPLETE_FUNCTION_NAME, "success|"+fileReference+fileName);
+
+                    } catch (InterruptedException e) {
+
+                    }
+
+                }
+            }).start();
     }
 
-    private void onDownloadFailed(long fileReference, int status, int reason)
-    {
-        FileDownloader downloader = GetFileDownloaderFor(fileReference);
-        if(downloader !=null) downloader.OnDownloadCompleted(false);
+    private void onDownloadFailed(final long fileReference,final int status, final int reason) {
+        final FileDownloader downloader = GetFileDownloaderFor(fileReference);
+        if (downloader != null) downloader.OnDownloadCompleted(false);
 
-        String fileName = downloader != null ? "@"+downloader.m_fileName : "";
-        LogDebug("onDownloadFailed fileReference:"+fileReference+" reason:"+GetReasonString(reason)+ "- failed@"+fileReference+"@"+reason+"@"+GetReasonString(reason)+fileName);
-        ((DownloaderActivity)DownloaderActivity.instance).onDownloadComplete("failed@"+fileReference+"@"+reason+"@"+GetReasonString(reason)+fileName+"@"+GetStatusString(status));
-        //UnityMessageUtils.sendMessageToUnity(CALLBACK_GAMEOBJECT_NAME,CALLBACK_COMPLETE_FUNCTION_NAME, "failed|"+fileReference+"|"+reason+"|"+GetReasonString(reason)+fileName);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (isApplicationPaused)
+                        Thread.sleep(1000);
+
+                    String fileName = downloader != null ? "@" + downloader.m_fileName : "";
+                    LogDebug("onDownloadFailed fileReference:" + fileReference + " reason:" + GetReasonString(reason) + "- failed@" + fileReference + "@" + reason + "@" + GetReasonString(reason) + fileName);
+                    ((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete("failed@" + fileReference + "@" + reason + "@" + GetReasonString(reason) + fileName + "@" + GetStatusString(status));
+                    //UnityMessageUtils.sendMessageToUnity(CALLBACK_GAMEOBJECT_NAME,CALLBACK_COMPLETE_FUNCTION_NAME, "failed|"+fileReference+"|"+reason+"|"+GetReasonString(reason)+fileName);
+                } catch (InterruptedException e) {
+                }
+            }
+        }).start();
     }
     // ----------------------------
+
+    public void onPause()
+    {
+        isApplicationPaused = true;
+        /*m_isAppInBackground = true;
+        if(m_canShowDownloadPogress)
+            displayProgressNotification();*/
+    }
+
+    public void onResume()
+    {
+        isApplicationPaused = false;
+        /*if(m_isAppInBackground == true)
+        {
+            m_isAppInBackground = false;
+            cancelProgressBar(false);
+        }*/
+    }
 
     public File getDestinationFolder() {
         return getAppContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
@@ -166,9 +210,8 @@ public class NativeDownloadManager {
                 if(downloader != null && downloader.MoveFileToDestination()) {
                     // Download complete
                     onDownloadComplete(fileReference);
-                }
-                else
-                {
+                }else {
+                    // Download failed since we can't copy to the destination
                     onDownloadFailed(fileReference, DownloadManager.STATUS_FAILED, DownloadManager.ERROR_FILE_ERROR);
                 }
             }
@@ -188,7 +231,7 @@ public class NativeDownloadManager {
         @Override
         public void onReceive(Context context, Intent intent)
         {
-
+            OnNotificationClicked(context);
         }
     };
 
@@ -466,22 +509,6 @@ public class NativeDownloadManager {
 
 		if(isDlcFinished)
 			m_canShowDownloadPogress = false;	//Reset after DLC finishes
-	}
-
-	public void onPause()
-	{
-		m_isAppInBackground = true;
-		if(m_canShowDownloadPogress)
-			displayProgressNotification();
-	}
-
-	public void onResume()
-	{
-		if(m_isAppInBackground == true)
-		{
-			m_isAppInBackground = false;
-			cancelProgressBar(false);
-		}
 	}
 
 	public static void showProgressBar(boolean canShow)

@@ -162,8 +162,6 @@ public class FileDownloader {
     {
         m_isDownloadCompleted = true;
         m_isDownloadSucceded = success;
-        /*if(m_isDownloadSucceded)
-            MoveFileToDestination();*/
     }
 
     public boolean isDownloadedFileExists()
@@ -184,22 +182,32 @@ public class FileDownloader {
         return m_isDownloadCompleted;
     }
 
+    private boolean CreateDestinationFolders(String destPath)
+    {
+        File dest = new File(destPath);
+        boolean isFileExists = dest.exists();
+        boolean isParentExists = dest.getParentFile().exists();
+        if(isFileExists)
+            return true;
+        else if(isParentExists)
+            return dest.mkdir();
+        else if(CreateDestinationFolders(dest.getParent()))
+            return dest.mkdir();
+        return true;
+    }
+
     public boolean MoveFileToDestination()
     {
         LogDebug("MoveFileToDestination fileReference:"+m_fileReference+" fileName:"+m_fileName+" sourcePath:"+m_destinationPath+" destinationPath:"+m_destination);
         if (m_destinationPath != null && m_destination != null) {
             try {
                 File file = new File(m_destinationPath, m_fileName);
-                /*if(file.exists() && file.renameTo(new File(m_destination, m_fileName)))
-                    //return file.delete();
-                    return true;*/
 
                 if(file.exists()) {
                     File dest = new File(m_destination, m_fileName);
 
                     // Create the parent dir if doesn't exist return failed if we can't create the parent dir
-                    if(!dest.getParentFile().exists() && !dest.getParentFile().mkdir())
-                        return false;
+                    CreateDestinationFolders(dest.getParent());
 
                     // Move the file to the destination and delete the source file and return fail if can't move or delete source
                     if(!file.renameTo(dest) && !file.delete())
@@ -207,28 +215,6 @@ public class FileDownloader {
 
                     // Clear the empty folders
 
-                    /*try (InputStream in = new FileInputStream(file)) {
-                        try (OutputStream out = new FileOutputStream(dest)) {
-                            // Transfer bytes from in to out
-                            byte[] buf = new byte[1024];
-                            int len;
-                            while ((len = in.read(buf)) > 0) {
-                                out.write(buf, 0, len);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            LogError("Copy downloaded file failed wit exception fileName:"+m_fileName+" fileReference:"+m_fileReference+" exception:"+e.getMessage());
-                            return false;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        LogError("Copy downloaded file failed wit exception fileName:"+m_fileName+" fileReference:"+m_fileReference+" exception:"+e.getMessage());
-                        return false;
-                    }
-                    if(!file.exists() || !dest.exists())
-                        LogError("Copy downloaded file failed file not present in source and destination fileName:" + m_fileName + " fileReference:" + m_fileReference + " sourceExists?"+file.exists()+" destExists?"+dest.exists()+" downloadedSize:"+GetDownloadedSize());*/
                     LogDebug("MoveFileToDestination done fileReference:"+m_fileReference+" fileName:"+m_fileName + " sourceExists?"+file.exists()+" destExists?"+dest.exists()+" downloadedSize:"+GetDownloadedSize());
                     return true;
                 }
