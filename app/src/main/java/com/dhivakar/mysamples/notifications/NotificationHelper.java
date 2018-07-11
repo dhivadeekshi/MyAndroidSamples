@@ -179,6 +179,18 @@ public class NotificationHelper {
             notificationManager.notify(notificationId, builder.build());
     }
 
+    public static void CancelNotification(Context context, int notificationId){
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        if(notificationManager != null)
+            notificationManager.cancel(notificationId);
+    }
+
+    public static void CancelAllNotifications(Context context){
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        if(notificationManager != null)
+            notificationManager.cancelAll();
+    }
+
     public static PendingIntent DefaultPendingIntent(Context context)
     {
         return DefaultPendingIntentFor(context, MainActivity.class);
