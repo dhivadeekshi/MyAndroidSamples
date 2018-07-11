@@ -146,7 +146,7 @@ public class NotificationHelper {
 
     public static void CreateProgressNotification(String title, String message, int smallIcon, int max, int progress, boolean intermediate, String channelId, Context context, int notificationId)
     {
-        NotificationCompat.Builder builder = CreateNotification(title, message, smallIcon, channelId, context)
+        NotificationCompat.Builder builder = CreateBigTextNotificationBuilder(title, message, smallIcon, channelId, context)
                 .setProgress(max,progress,intermediate);
         PublishNotification(context, builder, notificationId);
     }
@@ -166,10 +166,17 @@ public class NotificationHelper {
                 .setContentIntent(DefaultPendingIntent(context));
 
         return builder;
-                /*
-                .setColor(notificationId==0?Color.RED:notificationId==1?Color.GREEN:Color.BLUE)
-                .setColorized(true)
-                .setDeleteIntent(pi)*/
+    }
+
+    public static NotificationCompat.Builder CreateBigTextNotificationBuilder(String title, String message, int smallIcon, String channelId, Context context)
+    {
+        // Create Big Text Style
+        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
+        style.setBigContentTitle(title);
+
+        NotificationCompat.Builder builder = CreateNotification(title, message, smallIcon, channelId, context)
+                .setStyle(style);
+        return builder;
     }
 
     public static void PublishNotification(Context context, NotificationCompat.Builder builder, int notificationId)
