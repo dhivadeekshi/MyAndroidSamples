@@ -7,15 +7,8 @@ import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 public class FileDownloader {
-
-    private static final String DOWNLOAD_REQUEST_TITLE = "Downloading ";
-    private static final String DOWNLOAD_REQUEST_DESCRIPTION = "Downloading Game Content...";
 
     private DownloadManager m_downloadManager;
     private File m_destinationPath;
@@ -41,7 +34,7 @@ public class FileDownloader {
         m_fileReference = 0;
     }
 
-    public void StartDownload(String fileUrl, String fileName, String destination, Context context) {
+    public void StartDownload(String fileUrl, String fileName, String destination, Context context, boolean showNotification, String title, String description) {
         //Remove the file before downloading
         deleteFileIfExists(fileName);
 
@@ -49,10 +42,10 @@ public class FileDownloader {
         DownloadManager.Request downloadRequest = new DownloadManager.Request(Uri.parse(fileUrl));
 
         //Setting title of request
-        downloadRequest.setTitle(DOWNLOAD_REQUEST_TITLE + fileName);
+        downloadRequest.setTitle(title);
 
         //Setting description of request
-        downloadRequest.setDescription(DOWNLOAD_REQUEST_DESCRIPTION);
+        downloadRequest.setDescription(description);
 
         //Set the local destination for the downloaded file to a path within the application's external files directory
         downloadRequest.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOCUMENTS, fileName);
@@ -61,7 +54,7 @@ public class FileDownloader {
         downloadRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
 
         //set if notification to be displayed
-        downloadRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+        downloadRequest.setNotificationVisibility(showNotification ? DownloadManager.Request.VISIBILITY_VISIBLE : DownloadManager.Request.VISIBILITY_HIDDEN);
 
         try {
             //Enqueue download and save into referenceId
@@ -78,12 +71,9 @@ public class FileDownloader {
     }
 
     public void CancelDownload() {
-        LogDebug("CancelDownload start fileReference:" + m_fileReference);
         if (m_downloadManager != null && !m_isDownloadCompleted) {
-            LogDebug("CancelDownload do fileReference:" + m_fileReference);
             m_downloadManager.remove(m_fileReference);
         }
-        LogDebug("CancelDownload end fileReference:" + m_fileReference);
     }
 
     public long GetDownloadedSize() {
@@ -181,6 +171,7 @@ public class FileDownloader {
     {
         return m_isDownloadCompleted;
     }
+    public boolean isDownloadSucceeded() { return m_isDownloadSucceded; }
 
     private boolean CreateDestinationFolders(String destPath)
     {
@@ -198,7 +189,6 @@ public class FileDownloader {
 
     public boolean MoveFileToDestination()
     {
-        LogDebug("MoveFileToDestination fileReference:"+m_fileReference+" fileName:"+m_fileName+" sourcePath:"+m_destinationPath+" destinationPath:"+m_destination);
         if (m_destinationPath != null && m_destination != null) {
             try {
                 File file = new File(m_destinationPath, m_fileName);
@@ -215,7 +205,6 @@ public class FileDownloader {
 
                     // Clear the empty folders
 
-                    LogDebug("MoveFileToDestination done fileReference:"+m_fileReference+" fileName:"+m_fileName + " sourceExists?"+file.exists()+" destExists?"+dest.exists()+" downloadedSize:"+GetDownloadedSize());
                     return true;
                 }
                 else

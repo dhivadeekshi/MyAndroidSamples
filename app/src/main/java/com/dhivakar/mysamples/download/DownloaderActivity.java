@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -21,14 +22,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.dhivakar.mysamples.download.NativeDownloadManager.NOTIFICATION_TYPE_COUNT;
+import static com.dhivakar.mysamples.download.NativeDownloadManager.NOTIFICATION_TYPE_SIZE;
+
 public class DownloaderActivity extends BaseAppCompatActivity {
 
     public static Activity instance = null;
     private int downloadingCount = 0;
+    private int downloadStartedCount = 0;
     private int downloadCompletedCount = 0;
     private int downloadFailedCount = 0;
-    //private int downloadFailed404Count = 0;
     private boolean isApplicationPaused = false;
+    private boolean showCumulativeNotification = false;
 
     private ArrayList<DownloaderInfo> downloaderInfos = new ArrayList<>();
     private String serverurl = "";
@@ -36,9 +41,9 @@ public class DownloaderActivity extends BaseAppCompatActivity {
     private AssetBundleVariant selectedVariant = AssetBundleVariant.High;
     private ArrayList<DownloaderFailedInfo> downloaderFailedInfos = new ArrayList<>();
 
-    // Download Progress
-    private int downloadProgressMax = 0;
-    private int downloadProgress = 0;
+    NativeDownloadManager downloadManager = null;
+    private boolean downloadCanceled = false;
+    private int downloadNotificationType = NOTIFICATION_TYPE_COUNT;
 
     private enum AssetBundleVariant{
         High,
@@ -60,7 +65,9 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         public boolean downloadSuccess;
         public String downloadFailedReason;
 
-        private int fileSize = 0;
+        private long fileSize = 0;
+        public long prevFileSize = 0;
+        public FileDownloader downloader = null;
 
         public DownloaderInfo(String fileUrl, String fileName, String destination) {
             this.fileUrl = fileUrl;
@@ -185,6 +192,9 @@ public class DownloaderActivity extends BaseAppCompatActivity {
             case 2: // secondDownload
                 PopulateSecondDownload(serverurl);
                 break;
+            case 3: // First + Second
+                PopulateFirstDownload(serverurl);
+                PopulateSecondDownload(serverurl);
             default:
                 PopulateDownloaderInfo(serverurl, R.raw.downloadlist);
                 break;
@@ -255,11 +265,11 @@ public class DownloaderActivity extends BaseAppCompatActivity {
     }
 
     private void UpdateDownloaderInfoUI() {
-        String seperator = "\t\t\t:";
         String newLine = "\n";
         HashMap<String, String> downloaderInfo = new HashMap<>();
         downloaderInfo.put("TotalFiles", downloaderInfos.size() + "");
         downloaderInfo.put("Downloading", downloadingCount + "");
+        downloaderInfo.put("DownloadStarted", "" + downloadStartedCount);
         downloaderInfo.put("Completed", downloadCompletedCount + "");
         downloaderInfo.put("Failed", downloadFailedCount + "");
         for(DownloaderFailedInfo failedInfo: downloaderFailedInfos)
@@ -318,6 +328,15 @@ public class DownloaderActivity extends BaseAppCompatActivity {
     private void SetDefaultUI() {
         RadioButton defaultDownload = (RadioButton) findViewById(R.id.radioButtonDefault);
         defaultDownload.setChecked(true);
+
+        RadioButton defaultNotificationType = (RadioButton) findViewById(R.id.radioButtonTotalFilesCount);
+        defaultNotificationType.setChecked(true);
+
+        TextView title = (TextView) findViewById(R.id.textNotificationTitle);
+        TextView description = (TextView) findViewById(R.id.textNotificationDescription);
+
+        title.setText("Dhivakar");
+        description.setText("Downloading Content...");
     }
 
     @Override
@@ -344,6 +363,25 @@ public class DownloaderActivity extends BaseAppCompatActivity {
             case R.id.radioButtonSecondDownload:
                 SetDownloadIndex(v, 2);
                 break;
+            case R.id.radioButtonDownloadAll:
+                SetDownloadIndex(v, 3);
+                break;
+
+            case R.id.radioButtonTotalFilesCount:
+                downloadNotificationType = NOTIFICATION_TYPE_COUNT;
+                break;
+            case R.id.radioButtonTotalFilesSize:
+                downloadNotificationType = NOTIFICATION_TYPE_SIZE;
+                break;
+
+            case R.id.checkBoxShowCumulativeNotification:
+                if(downloadingCount == 0 || downloadCanceled){
+                    downloadManager = null;
+                    showCumulativeNotification = ((CheckBox)v).isChecked();
+                }
+                else
+                    ((CheckBox)v).setChecked(showCumulativeNotification);
+                break;
         }
     }
 
@@ -357,63 +395,97 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         LogUtils.d(this, "SetDownloadIndex : " + ((RadioButton) radioView).getText());
     }
 
-    NativeDownloadManager downloadManager = null;
+    // Notifications
+    // -----------------------
 
+    private Thread ThreadStartDownloading = null;
     private void StartDownload() {
         if (downloadingCount > 0)
             return;
         if (downloadManager == null)
-            downloadManager = new NativeDownloadManager();
+            downloadManager = new NativeDownloadManager(showCumulativeNotification, downloadNotificationType);
 
+        CancelDownload();
         PopulateDownloaderInfo();
         ResetDownloadedInfo();
 
+        downloadCanceled = false;
         downloadingCount = 0;
+        downloadStartedCount = 0;
         downloadCompletedCount = 0;
         downloadFailedCount = 0;
         UpdateUI();
 
+        // Notification
+        if(downloadNotificationType == NOTIFICATION_TYPE_COUNT)
+            downloadManager.SetNotificationMaxCount(downloaderInfos.size());
+        else if(downloadNotificationType == NOTIFICATION_TYPE_SIZE){
+            double firstDownloadSizeInMB = 72.25d;
+            double secoondDownloadSizeInMb = 72.25d;
+            long mbToBytes = 1024 * 1024;
+            double totalDownloadSize = 1;
+            switch (downloadFilesIndex){
+                case 1: totalDownloadSize = firstDownloadSizeInMB; break;
+                case 2: totalDownloadSize = secoondDownloadSizeInMb; break;
+                case 3: totalDownloadSize = firstDownloadSizeInMB + secoondDownloadSizeInMb; break;
+            }
+            downloadManager.SetNotificationMaxSize((long) totalDownloadSize * mbToBytes);
+        }
+
         if (downloaderInfos != null) {
-            new Thread(new Runnable() {
+            ThreadStartDownloading = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     for (DownloaderInfo download :
                             downloaderInfos) {
-                        try {
+                        /*try {
                             while(isApplicationPaused)
                                 Thread.sleep(1000);
-                        }catch (InterruptedException e){}
+                        }catch (InterruptedException e){}*/
+
+                        if(ThreadStartDownloading == null)
+                            break;
 
                         download.downloadSuccess = false;
                         download.downloadComplete = false;
                         download.downloadFailedReason = "";
-                        download.fileReference = downloadManager.StartDownload(download.fileUrl, download.fileName, download.destination);
-                        //LogUtils.d("DownloadSize","downloadSize = "+downloadManager.GetDownloadedSize(download.fileReference)+" fileSize:"+downloadManager.GetFileSize(download.fileReference) );
+                        download.downloader = downloadManager.CreateDownload(download.fileUrl, download.fileName, download.destination);
+                        download.fileReference = download.downloader.m_fileReference;
                         downloadingCount++;
+                        downloadStartedCount++;
+                        /*while (download.downloader.GetFileSize() == -1)
+                        {
+                            try{
+                                Thread.sleep(1);
+                            }catch (InterruptedException e){}
+                        }
+                        download.fileSize = download.downloader.GetFileSize();*/
+                        LogUtils.d("DownloadSize","downloadSize = "+download.downloader.GetDownloadedSize()+" fileSize:"+download.fileSize);
                         UpdateUI();
                     }
+                    LogUtils.d(TAG, "All DownloadsAdded");
+
                 }
-            }).start();
+            });
+            ThreadStartDownloading.start();
         }
     }
 
     private void CancelDownload() {
+        downloadCanceled = true;
+        if(ThreadStartDownloading != null && ThreadStartDownloading.isAlive() && !ThreadStartDownloading.isInterrupted())
+            ThreadStartDownloading.interrupt();
+        ThreadStartDownloading = null;
         downloadingCount = 0;
         UpdateUI();
-        if (downloadManager != null && downloaderInfos != null) {
-            for (DownloaderInfo download :
-                    downloaderInfos) {
-                if (download.fileReference != -1)
-                    downloadManager.CancelDownload(download.fileReference);
-            }
-        }
+        if (downloadManager != null)
+            downloadManager.CancelAllDownloads();
     }
 
     private void ClearData() {
         File destination = new File(getString(R.string.AssetDefaultDestination));
-        LogUtils.d(this, "ClearData dest:" + destination + " exists?" + destination.exists());
         if (destination.exists() && destination.isDirectory())
-            LogUtils.d(this, "ClearData succeed?" + DeleteDir(destination.toString()));
+            LogUtils.d(this, "ClearData dest:" + destination + " succeed?" + DeleteDir(destination.toString()));
         File docPath = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
         if (docPath != null && docPath.exists())
             LogUtils.d(this, "ClearDocuments doc:" + docPath + " succeed?" + DeleteDir(docPath.toString()));
@@ -432,13 +504,14 @@ public class DownloaderActivity extends BaseAppCompatActivity {
     }
 
     public void onDownloadComplete(String message) {
+        if(downloadCanceled) return;
         try {
-            String[] messagesReceived = message.split("@");
+            String[] messagesReceived = message.split(NativeDownloadManager.StringSeperator);
             LogUtils.d(this, "OnDownloadComplete : " + message);
             boolean status = messagesReceived.length > 0 && messagesReceived[0].equals("success");
             long fileReference = -1;
             if (messagesReceived.length > 1) fileReference = Long.parseLong(messagesReceived[1]);
-            String error = messagesReceived.length > 3 ? messagesReceived[2] : messagesReceived.length > 2 ? messagesReceived[2] : "";
+            String error = messagesReceived.length > 3 ? messagesReceived[3] : messagesReceived.length > 2 ? messagesReceived[2] : "";
             if (downloaderInfos != null && fileReference != -1) {
                 for (DownloaderInfo download :
                         downloaderInfos) {
@@ -446,7 +519,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
                         download.downloadComplete = true;
                         download.downloadSuccess = status;
                         download.downloadFailedReason = error;
-                        downloadManager.CancelDownload(fileReference);
+                        downloadManager.CancelDownload(download.downloader);
                         if (status) downloadCompletedCount++;
                         else {
                             downloadFailedCount++;
@@ -462,19 +535,21 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         } catch (Exception e) {
             LogUtils.e(this, "onDownloadComplete exception:" + e.getMessage());
         }
+        if(downloadFailedCount + downloadCompletedCount == downloadStartedCount)
+            downloadManager.DisplayDownloadCompletedNotification();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isApplicationPaused = true;
-        if(downloadManager != null) downloadManager.onPause();
+        //if(downloadManager != null) downloadManager.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         isApplicationPaused = false;
-        if(downloadManager != null) downloadManager.onResume();
+        //if(downloadManager != null) downloadManager.onResume();
     }
 }

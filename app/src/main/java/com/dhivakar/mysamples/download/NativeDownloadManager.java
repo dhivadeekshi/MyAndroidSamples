@@ -12,28 +12,51 @@ import java.io.File;
 import java.util.ArrayList;
 
 // Project Based Imports
-import com.dhivakar.mysamples.MainActivity;
+import com.dhivakar.mysamples.notifications.NotificationHelper;
 import com.dhivakar.mysamples.utils.LogUtils;
 // ------------------------
 
 public class NativeDownloadManager {
 
-
-    private static final String TAG = "Dhivakar";// "D_MANAGER";
+    private static final String TAG = "D_MANAGER";
     private ArrayList<FileDownloader> downloaders = new ArrayList<>();
     private DownloadManager m_downloadManager;
     private boolean isApplicationPaused = false;
+    private boolean m_showCumulativeNotification = false;
+    private NotificationType m_cumulativeNotificationType = NotificationType.DownloadCount;
+    public static final int NOTIFICATION_TYPE_COUNT = 1;
+    public static final int NOTIFICATION_TYPE_SIZE = 2;
+
+    private enum NotificationType{
+        DownloadCount,
+        DownloadSize
+    }
+
+    private NotificationType getNotificationTypeFromInt(int notificationType) {
+        switch (notificationType) {
+            default:
+            case NOTIFICATION_TYPE_COUNT:
+                return NotificationType.DownloadCount;
+            case NOTIFICATION_TYPE_SIZE:
+                return NotificationType.DownloadSize;
+        }
+    }
 
     // Update based on your project
-    private static final String CALLBACK_GAMEOBJECT_NAME = "NativeAssetFileDownloadJobListener";
-    private static final String CALLBACK_COMPLETE_FUNCTION_NAME = "OnDownloadComplete";
+    public static final String StringSeperator = "@";
+    private static final String DOWNLOAD_REQUEST_TITLE = "Dhivakar";
+    private static final String DOWNLOAD_REQUEST_DESCRIPTION = "Downloading Game Content...";
+    private static final String DOWNLOAD_REQUEST_DESCRIPTION_COMPLETED = "Download Completed";
+    private static final String DOWNLOAD_REQUEST_CHANNELID = NotificationHelper.CHANNEL_ID_DEFAULT;
+    private static final int DOWNLOAD_REQUEST_NOTIFICATION_ICON = NotificationHelper.SMALL_ICON_DEFAULT;
+    private static final int DOWNLOAD_REQUEST_NOTIFICATIONID = 999;
+
     public Context getAppContext() {
         return DownloaderActivity.instance.getApplicationContext();
     }
 
     private void OnNotificationClicked(Context context)
     {
-        LogDebug("NotificationClickedReceiver onReceive");
         Intent launchIntent = new Intent(context, DownloaderActivity.class);
         launchIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(launchIntent);
@@ -49,30 +72,25 @@ public class NativeDownloadManager {
         LogUtils.d(TAG, message);
     }
 
-    private void onDownloadComplete(final long fileReference)
-    {
+    private void onDownloadComplete(final long fileReference) {
         final FileDownloader downloader = GetFileDownloaderFor(fileReference);
-        if(downloader !=null) downloader.OnDownloadCompleted(true);
+        if (downloader != null) downloader.OnDownloadCompleted(true);
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (isApplicationPaused) {
-                            Thread.sleep(1000);
-                        }
-
-                        String fileName = downloader != null ? "@" + downloader.m_fileName : "";
-                        LogDebug("onDownloadComplete  fileReference:" + fileReference + "- success@" + fileReference + fileName);
-                        ((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete("success@" + fileReference + fileName);
-                        //UnityMessageUtils.sendMessageToUnity(CALLBACK_GAMEOBJECT_NAME,CALLBACK_COMPLETE_FUNCTION_NAME, "success|"+fileReference+fileName);
-
-                    } catch (InterruptedException e) {
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (isApplicationPaused) {
+                        Thread.sleep(1000);
                     }
-
+                } catch (InterruptedException e) {
                 }
-            }).start();
+                String fileName = downloader != null ? StringSeperator + downloader.m_fileName : "";
+                String message = "success" + StringSeperator + fileReference + fileName;
+                LogDebug("onDownloadComplete  fileReference:" + fileReference + "- success" + StringSeperator + fileReference + fileName);
+                ((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete(message);
+            }
+        }).start();
     }
 
     private void onDownloadFailed(final long fileReference,final int status, final int reason) {
@@ -85,13 +103,12 @@ public class NativeDownloadManager {
                 try {
                     while (isApplicationPaused)
                         Thread.sleep(1000);
-
-                    String fileName = downloader != null ? "@" + downloader.m_fileName : "";
-                    LogDebug("onDownloadFailed fileReference:" + fileReference + " reason:" + GetReasonString(reason) + "- failed@" + fileReference + "@" + reason + "@" + GetReasonString(reason) + fileName);
-                    ((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete("failed@" + fileReference + "@" + reason + "@" + GetReasonString(reason) + fileName + "@" + GetStatusString(status));
-                    //UnityMessageUtils.sendMessageToUnity(CALLBACK_GAMEOBJECT_NAME,CALLBACK_COMPLETE_FUNCTION_NAME, "failed|"+fileReference+"|"+reason+"|"+GetReasonString(reason)+fileName);
                 } catch (InterruptedException e) {
                 }
+                String fileName = downloader != null ? StringSeperator + downloader.m_fileName : "";
+                String message = "failed" + StringSeperator + fileReference + StringSeperator + reason + StringSeperator + GetReasonString(reason) + fileName + StringSeperator + GetStatusString(status);
+                LogDebug("onDownloadFailed fileReference:" + fileReference + " reason:" + GetReasonString(reason) + "- failed" + StringSeperator + fileReference + StringSeperator + reason + StringSeperator + GetReasonString(reason) + fileName);
+                ((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete(message);
             }
         }).start();
     }
@@ -131,44 +148,95 @@ public class NativeDownloadManager {
     }
 
     public NativeDownloadManager() {
-        registerBroadcastReceivers();
+        //registerBroadcastReceivers();
+        Init(false, NOTIFICATION_TYPE_COUNT);
     }
 
-    public long StartDownload(String fileUrl, String fileName, String destination) {
+    public NativeDownloadManager(boolean showCumulativeNotification) {
+        //registerBroadcastReceivers();
+        Init(showCumulativeNotification, NOTIFICATION_TYPE_COUNT);
+    }
 
-        /*m_dlcDownloadSize	 = dlcDownloadedSize;
-        m_dlcSize			 = dlcSize;
-        m_fileDownloadedSize = 0;
-        m_fileSize		 = 0;*/
+    public NativeDownloadManager(boolean showCumulativeNotification, int notificationType) {
+        //registerBroadcastReceivers();
+        Init(showCumulativeNotification, notificationType);
+    }
+
+    public void SetNotificationMaxCount(int totalFiles){
+        this.totalFiles = totalFiles;
+        downloadedFiles = 0;
+    }
+
+    public void SetNotificationMaxSize(long totalDownloadSize){
+        this.totalDownloadSize = totalDownloadSize;
+        downloadedSize = 0;
+    }
+
+    public void Init(boolean showCumulativeNotification, int notificationType){
+        m_showCumulativeNotification = showCumulativeNotification;
+        m_cumulativeNotificationType = getNotificationTypeFromInt(notificationType);
+    }
+
+    public FileDownloader CreateDownload(String fileUrl, String fileName, String destination, boolean showNotification) {
 
         FetchDownloadManger();
 
         FileDownloader downloader = new FileDownloader(m_downloadManager, getDestinationFolder());
-        downloader.StartDownload(fileUrl, fileName, destination, getAppContext());
+        downloader.StartDownload(fileUrl, fileName, destination, getAppContext(), showNotification, "Downloading "+fileName, DOWNLOAD_REQUEST_DESCRIPTION);
         downloaders.add(downloader);
 
-        /*if(downloaders.size() == 1)
-            registerBroadcastReceivers();*/
-
+        if(downloaders.size() == 1)
+            registerBroadcastReceivers();
 
         /*if(m_isAppInBackground && m_canShowDownloadPogress)
             displayProgressNotification();*/
 
+        ShowDownloadingProgressNotification();
         LogDebug("DownloadStarted fileUrl:" + fileUrl+" fileName:"+fileName+" destination:"+destination+" fileReference:"+downloader.m_fileReference);
-        return downloader.m_fileReference;
+        return downloader;
     }
 
-    public void CancelDownload(long fileReference) {
-        if (downloaders.size() == 0) return;
-        FileDownloader downloader = GetFileDownloaderFor(fileReference);
+    public FileDownloader CreateDownload(String fileUrl, String fileName, String destination) {
+        return CreateDownload(fileUrl, fileName, destination, false);
+    }
+
+    public FileDownloader CreateDownload(String fileUrl, String fileName, String destination, int totalFiles, int downloadedFiles) {
+        this.totalFiles = totalFiles;
+        this.downloadedFiles = downloadedFiles;
+        return CreateDownload(fileUrl, fileName, destination);
+    }
+
+    public long StartDownload(String fileUrl, String fileName, String destination, int totalFiles, int downloadedFiles) {
+        return CreateDownload(fileUrl, fileName, destination, totalFiles, downloadedFiles).m_fileReference;
+    }
+
+    public long StartDownload(String fileUrl, String fileName, String destination) {
+        return CreateDownload(fileUrl, fileName, destination).m_fileReference;
+    }
+
+    public void CancelAllDownloads()
+    {
+        for(FileDownloader downloader:downloaders){
+            CancelDownload(downloader);
+        }
+        CancelDownloadingProgressNotification();
+    }
+
+    public void CancelDownload(FileDownloader downloader)
+    {
         if (downloader != null) {
-            LogDebug("CancelDownload fileReference:" + fileReference + " isFileExists?" + downloader.isDownloadedFileExists());
+            LogDebug("CancelDownload fileReference:" + downloader.m_fileReference + " isFileExists?" + downloader.isDownloadedFileExists());
             downloader.CancelDownload();
             downloaders.remove(downloader);
         }
 
-        /*if (downloaders.size() == 0)
-            unregisterBroadcastReceivers();*/
+        if (downloaders.size() == 0)
+            unregisterBroadcastReceivers();
+    }
+
+    public void CancelDownload(long fileReference) {
+        if (downloaders.size() == 0) return;
+        CancelDownload(GetFileDownloaderFor(fileReference));
     }
 
     public long GetDownloadedSize(long fileReference) {
@@ -219,6 +287,15 @@ public class NativeDownloadManager {
             {
                 // Download failed
                 onDownloadFailed(fileReference, status, reason);
+            }
+
+            // Succeeded or File not found in server
+            if(status == DownloadManager.STATUS_SUCCESSFUL || reason == 404){
+                // Update Notification count
+                downloadedFiles++;
+                if(downloader != null)
+                    downloadedSize += downloader.GetDownloadedSize();
+                ShowDownloadingProgressNotification();
             }
         }
     };
@@ -398,6 +475,104 @@ public class NativeDownloadManager {
         }
         return null;
     }
+
+    // Notification -----------------
+    private Thread notificationProgressTread = null;
+    private int downloadedFiles = 0;
+    private int totalFiles = 0;
+    private long totalDownloadSize = 0;
+    private long downloadedSize = 0;
+    private void ShowDownloadingProgressNotification() {
+        if (m_showCumulativeNotification) {
+
+            if (m_cumulativeNotificationType == NotificationType.DownloadSize) {
+                /*CancelDownloadingProgressNotification();
+
+                notificationProgressTread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+                            // Need to get the downloaded size and max download size
+                            while (downloadedSize < totalDownloadSize) {
+                                int progress = Math.round(((float) downloadedFiles / (float) totalFiles) * 100f);
+                                DisplayNotification(100, progress);
+                                Thread.sleep(1000);
+                            }
+                            LogDebug("DisplayNotification ended");
+                            DisplayDownloadCompletedNotification();
+                        } catch (InterruptedException e) {
+                            CancelDownloadingProgressNotification();
+                            LogError("DisplayNotification ended with exception");
+                        }
+                    }
+                });
+                notificationProgressTread.start();*/
+                // Option 2
+                if(totalDownloadSize != 0 && downloadedSize < totalDownloadSize){
+                    int progress = Math.round(((float) downloadedSize / (float) totalDownloadSize) * 100f);
+                    DisplayNotification(100, progress);
+                }
+            }
+            else {
+                // Download Count Notification
+                // For downloaded count we don't need any thread since the download completed can be detected from OnDownloadComplete
+                if(totalFiles != 0 && downloadedFiles < totalFiles)
+                    DisplayNotification(totalFiles, downloadedFiles);
+            }
+        }
+    }
+
+    private void CancelDownloadingProgressNotification() {
+        if (notificationProgressTread != null && notificationProgressTread.isAlive() && !notificationProgressTread.isInterrupted())
+            notificationProgressTread.interrupt();
+        notificationProgressTread = null;
+
+        if (m_showCumulativeNotification) {
+            NotificationHelper.CancelNotification(getAppContext(), NotificationHelper.NOTIFICATION_ID_DEFAULT);
+        }
+        CancelDownloadNotification();
+    }
+
+    public void CancelDownloadNotification(){
+        NotificationHelper.CancelNotification(getAppContext(), DOWNLOAD_REQUEST_NOTIFICATIONID);
+    }
+
+    private void DisplayNotification(int max, int progress)
+    {
+        String downloadDescription = DOWNLOAD_REQUEST_DESCRIPTION;
+        long bytesToMB = 1024 * 1024;
+        switch (m_cumulativeNotificationType) {
+            case DownloadCount:
+                downloadDescription += " " + progress + "/" + max;
+                break;
+            case DownloadSize:
+                downloadDescription += " " + ((double)(downloadedSize / bytesToMB)) + "/" + ((double)(totalDownloadSize / bytesToMB));
+        }
+        NotificationHelper.CreateProgressNotification(
+                DOWNLOAD_REQUEST_TITLE,
+                downloadDescription,
+                DOWNLOAD_REQUEST_NOTIFICATION_ICON,
+                max,
+                progress,
+                progress == 0,
+                DOWNLOAD_REQUEST_CHANNELID,
+                getAppContext(),
+                DOWNLOAD_REQUEST_NOTIFICATIONID);
+    }
+
+    public void DisplayDownloadCompletedNotification(){
+        if(m_showCumulativeNotification){
+        NotificationHelper.CreateBigTextNotification(
+                DOWNLOAD_REQUEST_TITLE,
+                DOWNLOAD_REQUEST_DESCRIPTION_COMPLETED,
+                DOWNLOAD_REQUEST_NOTIFICATION_ICON,
+                DOWNLOAD_REQUEST_CHANNELID,
+                getAppContext(),
+                DOWNLOAD_REQUEST_NOTIFICATIONID);
+        }
+    }
+    // ------------------------------
 
 /*
 	public static final int PROGRESSBAR_ID	= 555;

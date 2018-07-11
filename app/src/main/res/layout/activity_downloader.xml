@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -20,31 +20,132 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select Files to Download"/>
+                android:text="Select Files to Download"
+                android:textColor="@color/color_notifications"
+                android:textStyle="bold"/>
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Default"
                     android:id="@+id/radioButtonDefault"
-                    android:onClick="onClick"/>
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Complete"
+                    android:id="@+id/radioButtonDownloadAll"
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
+                <RadioButton
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="FirstDownload"
                     android:id="@+id/radioButtonFirstDownload"
-                    android:onClick="onClick"/>
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="SecondDownload"
                     android:id="@+id/radioButtonSecondDownload"
-                    android:onClick="onClick"/>
+                    android:onClick="onClick"
+                    android:layout_weight="1"/>
 
             </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#ddddff"
+                android:layout_margin="5sp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Notification Settings"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_notifications"/>
+
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Show Cumulative Notification"
+                    android:onClick="onClick"
+                    android:id="@+id/checkBoxShowCumulativeNotification"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select Notification Type"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp"/>
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp">
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Files Count"
+                        android:onClick="onClick"
+                        android:id="@+id/radioButtonTotalFilesCount"/>
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Files Size"
+                        android:onClick="onClick"
+                        android:id="@+id/radioButtonTotalFilesSize"/>
+
+                </RadioGroup>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Notification Title:"/>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:inputType="text"
+                        android:id="@+id/textNotificationTitle"
+                        android:focusedByDefault="false"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Notification Description:"/>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:inputType="text"
+                        android:id="@+id/textNotificationDescription"
+                        android:focusedByDefault="false"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,20 +172,28 @@
                     android:onClick="onClick"
                     android:id="@+id/buttonClearData"/>
             </LinearLayout>
-
-
         </LinearLayout>
-            <LinearLayout
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5sp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#ffddff"
-                android:layout_margin="5sp">
+                android:background="#ffddff">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Downloader Info"/>
+                    android:text="Downloader Info"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_notifications"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -113,17 +222,13 @@
 
         </LinearLayout>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#dddddd"
-            android:layout_margin="5sp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textDownloadFailedList"/>
+                android:id="@+id/textDownloadFailedList"
+                android:background="#dddddd"/>
+        </LinearLayout>
         </ScrollView>
-
 
     </LinearLayout>
 
