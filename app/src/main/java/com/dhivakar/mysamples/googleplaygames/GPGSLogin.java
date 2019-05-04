@@ -1,4 +1,4 @@
-package com.dhivakar.mysamples.googleplaygames;
+/*package com.dhivakar.mysamples.googleplaygames;
 
 import android.support.annotation.NonNull;
 import android.os.Bundle;
@@ -85,4 +85,4 @@ public class GPGSLogin extends BaseAppCompatActivity {
                     }
                 });
     }
-}
+}*/

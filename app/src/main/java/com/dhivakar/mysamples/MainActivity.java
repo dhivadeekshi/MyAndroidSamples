@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.dhivakar.mysamples.cast.GoogleChromeCast;
-import com.dhivakar.mysamples.download.DownloaderActivity;
-import com.dhivakar.mysamples.googleplaygames.GPGSAchievements;
+//import com.dhivakar.mysamples.download.DownloaderActivity;
+//import com.dhivakar.mysamples.googleplaygames.GPGSAchievements;
 import com.dhivakar.mysamples.notifications.NotificationHelper;
 import com.dhivakar.mysamples.notifications.NotificationsManager;
 import com.dhivakar.mysamples.orientation.OrientationsManager;
@@ -33,9 +33,9 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
         SetButtonClickListener(R.id.BtnLaunchNotifications, this, NotificationsManager.class);
         SetButtonClickListener(R.id.BtnLaunchOrientations, this, OrientationsManager.class);
         SetButtonClickListener(R.id.BtnLaunchExternalApps, this, ExternalAppsManager.class);
-        SetButtonClickListener(R.id.BtnLaunchGPGSAchievements, this, GPGSAchievements.class);
+        //SetButtonClickListener(R.id.BtnLaunchGPGSAchievements, this, GPGSAchievements.class);
         SetButtonClickListener(R.id.BtnLaunchGoogleChromeCast, this, GoogleChromeCast.class);
-        SetButtonClickListener(R.id.BtnLaunchDownloader, this, DownloaderActivity.class);
+        //SetButtonClickListener(R.id.BtnLaunchDownloader, this, DownloaderActivity.class);
 
         UpdateOrientationText(getResources().getConfiguration().orientation);
         ListenToOrientaionChanges.StartListening(this, this);
@@ -62,10 +62,8 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
     public void onClick(View v) {
         super.onClick(v);
 
-        switch(v.getId())
-        {
-            case R.id.buttonTestCrash: CrashForTesting(); break;
-        }
+        if(v.getId() == R.id.buttonTestCrash)
+            CrashForTesting();
     }
 
     @Override
@@ -115,6 +113,7 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
 
     private void CrashForTesting()
     {
+        LogUtils.d(this, "CrashForTesting");
         Crashlytics.log("App Crashed for Testing");
         Crashlytics.getInstance().crash(); /* Force a crash */
     }

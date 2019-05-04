@@ -41,6 +41,7 @@ public class BaseAppCompatActivity extends AppCompatActivity implements View.OnC
         CreateFireBaseAnalytics(this);
         LogActivityLaunch();
         Crashlytics.log("Activity Loaded : "+ClassName);
+        Crashlytics.setString("MenuLoaded",ClassName);
     }
 
     @Override
@@ -110,7 +111,7 @@ public class BaseAppCompatActivity extends AppCompatActivity implements View.OnC
             getSupportActionBar().setTitle(header);
             getSupportActionBar().setSubtitle(subTitle);
         }catch (NullPointerException e){
-
+            Crashlytics.log("Exception:"+e.getMessage());
         }
     }
 
@@ -122,7 +123,7 @@ public class BaseAppCompatActivity extends AppCompatActivity implements View.OnC
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.image_android_versions));
         }catch (NullPointerException e){
-
+            Crashlytics.log("Exception:"+e.getMessage());
         }
     }
 

@@ -8,39 +8,45 @@
     android:background="@color/color_orientations"
     android:id="@+id/orientation">
 
-
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Force Portrait"
-        android:id="@+id/buttonForcePortrait"/>
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/buttonForcePortrait"
-        android:text="Force Landscape"
-        android:id="@+id/buttonForceLandscape"/>
+        <Button
+            android:id="@+id/buttonForcePortrait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Force Portrait" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/buttonForceLandscape"
-        android:text="User Orientation"
-        android:id="@+id/buttonUserOrientation"/>
+        <Button
+            android:id="@+id/buttonForceLandscape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Force Landscape"
+            app:layout_constraintTop_toBottomOf="@id/buttonForcePortrait" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/buttonUserOrientation"
-        android:text="Portrait Orientation"
-        android:id="@+id/buttonPortraitOrientation"/>
+        <Button
+            android:id="@+id/buttonUserOrientation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="User Orientation"
+            app:layout_constraintTop_toBottomOf="@id/buttonForceLandscape" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/buttonPortraitOrientation"
-        android:text="Landscape Orientation"
-        android:id="@+id/buttonLandscapeOrientation"/>
+        <Button
+            android:id="@+id/buttonPortraitOrientation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Portrait Orientation"
+            app:layout_constraintTop_toBottomOf="@id/buttonUserOrientation" />
 
+        <Button
+            android:id="@+id/buttonLandscapeOrientation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Landscape Orientation"
+            app:layout_constraintTop_toBottomOf="@id/buttonPortraitOrientation" />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

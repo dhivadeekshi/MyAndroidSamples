@@ -8,17 +8,18 @@
         android:name="android.permission.GET_ACCOUNTS"
         android:maxSdkVersion="22" /
     -->
-    <uses-permission
+    <!--<uses-permission
         android:name="android.permission.USE_CREDENTIALS"
-        android:maxSdkVersion="22" />
-    <uses-permission
+        android:maxSdkVersion="22" />-->
+    <!--<uses-permission
         android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions" />
+        tools:ignore="ProtectedPermissions" />-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    <!--<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />-->
 
     <application
         android:allowBackup="true"
@@ -35,12 +36,12 @@
         <meta-data
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />
-        <meta-data
+        <!--<meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="label" />
+            android:value="label" />-->
         <!-- To use multiple models: android:value="label,model2,model3" -->
 
-        <service android:name=".notifications.FirebaseNotificationsService">
+        <!--<service android:name=".notifications.FirebaseNotificationsService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -48,7 +49,12 @@
         <service
             android:name=".notifications.FirebaseCloudMessagingService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true" />-->
+        <service android:name=".notifications.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".MainActivity"
@@ -101,36 +107,14 @@
             android:name=".externalapps.ExternalAppsManager"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity" />
-        <activity
+        <!--<activity
             android:name=".googleplaygames.GPGSAchievements"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity" />-->
         <activity
             android:name=".googleplaygames.GPGSAchievementsRedirectActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".googleplaygames.GPGSAchievements">
-            <intent-filter> <!-- com.ubisoft.dragonfire:/oauth2callback -->
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="com.ubisoft.com"
-                    android:pathPrefix="/oauth2callback"
-                    android:scheme="com.ubisoft.dragonfire" />
-            </intent-filter>
-            <intent-filter> <!-- https://ubisoft.dragonfire.com/oauth2callback -->
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="ubisoft.dragonfire.com"
-                    android:pathPrefix="/oauth2callback"
-                    android:scheme="https" />
-            </intent-filter>
+            android:launchMode="singleTop">
+            <!--android:parentActivityName=".googleplaygames.GPGSAchievements">-->
             <intent-filter> <!-- https://www.google.com/oauth2callback -->
                 <action android:name="android.intent.action.VIEW" />
 
@@ -142,37 +126,16 @@
                     android:pathPrefix="/oauth2callback"
                     android:scheme="https" />
             </intent-filter>
-            <intent-filter> <!-- com.ubisoft.dragonfire:/oauth2callback -->
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="www.google.com"
-                    android:pathPrefix="/oauth2callback"
-                    android:scheme="com.ubisoft.dragonfire" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="*.googleapis.com"
-                    android:scheme="com.ubisoft.dragonfire" />
-            </intent-filter>
         </activity>
         <activity android:name=".activity.WebViewActivity" />
-        <activity android:name=".googleplaygames.GPGSLogin" />
+        <!--<activity android:name=".googleplaygames.GPGSLogin" />-->
 
         <activity android:name=".cast.GoogleChromeCast"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".download.DownloaderActivity"
+        <!--<activity android:name=".download.DownloaderActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"/>-->
     </application>
 
 </manifest>

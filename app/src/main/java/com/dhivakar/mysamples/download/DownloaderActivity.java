@@ -1,4 +1,4 @@
-package com.dhivakar.mysamples.download;
+/*package com.dhivakar.mysamples.download;
 
 import android.app.Activity;
 import android.os.Build;
@@ -443,7 +443,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
                                 Thread.sleep(1000);
                         }catch (InterruptedException e){}*/
 
-                        if(ThreadStartDownloading == null)
+/*                        if(ThreadStartDownloading == null)
                             break;
 
                         download.downloadSuccess = false;
@@ -460,7 +460,7 @@ public class DownloaderActivity extends BaseAppCompatActivity {
                             }catch (InterruptedException e){}
                         }
                         download.fileSize = download.downloader.GetFileSize();*/
-                        LogUtils.d("DownloadSize","downloadSize = "+download.downloader.GetDownloadedSize()+" fileSize:"+download.fileSize);
+/*                        LogUtils.d("DownloadSize","downloadSize = "+download.downloader.GetDownloadedSize()+" fileSize:"+download.fileSize);
                         UpdateUI();
                     }
                     LogUtils.d(TAG, "All DownloadsAdded");
@@ -552,4 +552,4 @@ public class DownloaderActivity extends BaseAppCompatActivity {
         isApplicationPaused = false;
         //if(downloadManager != null) downloadManager.onResume();
     }
-}
+}*/

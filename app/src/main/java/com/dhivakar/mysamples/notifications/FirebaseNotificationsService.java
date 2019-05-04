@@ -1,4 +1,4 @@
-package com.dhivakar.mysamples.notifications;
+/*package com.dhivakar.mysamples.notifications;
 
 import android.util.Log;
 
@@ -18,4 +18,4 @@ public class FirebaseNotificationsService extends FirebaseInstanceIdService {
         // Instance ID token to your app server.
         //sendRegistrationToServer(refreshedToken);
     }
-}
+}*/

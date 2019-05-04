@@ -1,4 +1,4 @@
-package com.dhivakar.mysamples.googleplaygames;
+/*package com.dhivakar.mysamples.googleplaygames;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -25,19 +25,19 @@ import com.dhivakar.mysamples.R;
 import com.dhivakar.mysamples.activity.WebViewActivity;
 import com.dhivakar.mysamples.utils.HTTPRequestHandler;
 import com.dhivakar.mysamples.utils.LogUtils;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
-import com.google.android.gms.auth.api.signin.internal.GoogleSignInOptionsExtensionCreator;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+//import com.google.android.gms.auth.api.signin.GoogleSignIn;
+//import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+//import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+//import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+//import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
+//import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+//import com.google.android.gms.auth.api.signin.internal.GoogleSignInOptionsExtensionCreator;
+//import com.google.android.gms.common.Scopes;
+//import com.google.android.gms.common.api.ApiException;
+//import com.google.android.gms.common.api.Scope;
+//import com.google.android.gms.games.Games;
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -210,7 +210,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         }*/
 
 
-        final Account[] accounts = AccountManager.get(this).getAccounts();
+/*        final Account[] accounts = AccountManager.get(this).getAccounts();
         LogUtils.i(this, "Get All Accounts : " + accounts.length);
         for (Account account : accounts)
             LogUtils.i(this, "Get All Accounts accountName:" + account.name);
@@ -528,7 +528,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
                     https://www.googleapis.com/auth/games&
                 access_type=offline*/
 
-                StringBuilder url = new StringBuilder();
+/*                StringBuilder url = new StringBuilder();
                 url.append(AuthorizeURLV2).append('?');
                 url.append("client_id=").append(ClientIds[selectedClientId]); // Required
                 url.append("&redirect_uri=").append(RedirecrUriTokenWebClient); // Required
@@ -728,7 +728,7 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         scope=&
         grant_type=authorization_code*/
 
-        LogUtils.i(this, "selectedClientId : "+selectedClientId);
+/*        LogUtils.i(this, "selectedClientId : "+selectedClientId);
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("code", code); // Required
         properties.put("client_id", ClientIds[selectedClientId]); // Required
@@ -821,4 +821,4 @@ public class GPGSAchievements extends BaseAppCompatActivity {
         });
 
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.dhivakar.mysamples.notifications;
+/*package com.dhivakar.mysamples.notifications;
 
 import android.util.Log;
 
@@ -23,7 +23,7 @@ public class FirebaseCloudMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            //if (/* Check if data needs to be processed by long running job */ true) {
+            //if (/* Check if data needs to be processed by long running job *//* true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
             /*    scheduleJob();
             } else {
@@ -31,7 +31,7 @@ public class FirebaseCloudMessagingService extends FirebaseMessagingService {
                 handleNow();
             }*/
 
-        }
+/*        }
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
@@ -42,3 +42,4 @@ public class FirebaseCloudMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
     }
 }
+*/

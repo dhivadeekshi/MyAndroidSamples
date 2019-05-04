@@ -52,14 +52,14 @@ public class NativeDownloadManager {
     private static final int DOWNLOAD_REQUEST_NOTIFICATIONID = 999;
 
     public Context getAppContext() {
-        return DownloaderActivity.instance.getApplicationContext();
+        return null;//DownloaderActivity.instance.getApplicationContext();
     }
 
     private void OnNotificationClicked(Context context)
     {
-        Intent launchIntent = new Intent(context, DownloaderActivity.class);
+        /*Intent launchIntent = new Intent(context, DownloaderActivity.class);
         launchIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        context.startActivity(launchIntent);
+        context.startActivity(launchIntent);*/
     }
 
     public static void LogError(String message)
@@ -88,7 +88,7 @@ public class NativeDownloadManager {
                 String fileName = downloader != null ? StringSeperator + downloader.m_fileName : "";
                 String message = "success" + StringSeperator + fileReference + fileName;
                 LogDebug("onDownloadComplete  fileReference:" + fileReference + "- success" + StringSeperator + fileReference + fileName);
-                ((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete(message);
+                //((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete(message);
             }
         }).start();
     }
@@ -108,7 +108,7 @@ public class NativeDownloadManager {
                 String fileName = downloader != null ? StringSeperator + downloader.m_fileName : "";
                 String message = "failed" + StringSeperator + fileReference + StringSeperator + reason + StringSeperator + GetReasonString(reason) + fileName + StringSeperator + GetStatusString(status);
                 LogDebug("onDownloadFailed fileReference:" + fileReference + " reason:" + GetReasonString(reason) + "- failed" + StringSeperator + fileReference + StringSeperator + reason + StringSeperator + GetReasonString(reason) + fileName);
-                ((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete(message);
+                //((DownloaderActivity) DownloaderActivity.instance).onDownloadComplete(message);
             }
         }).start();
     }
