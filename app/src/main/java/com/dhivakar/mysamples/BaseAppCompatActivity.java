@@ -111,7 +111,8 @@ public class BaseAppCompatActivity extends AppCompatActivity implements View.OnC
             getSupportActionBar().setTitle(header);
             getSupportActionBar().setSubtitle(subTitle);
         }catch (NullPointerException e){
-            Crashlytics.log("Exception:"+e.getMessage());
+            Crashlytics.log("Exception in UpdateActivityHeader:"+e.getMessage());
+            Crashlytics.logException(e);
         }
     }
 
@@ -123,7 +124,8 @@ public class BaseAppCompatActivity extends AppCompatActivity implements View.OnC
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.image_android_versions));
         }catch (NullPointerException e){
-            Crashlytics.log("Exception:"+e.getMessage());
+            Crashlytics.log("Exception in UpdateActivityHeader:"+e.getMessage());
+            Crashlytics.logException(e);
         }
     }
 
