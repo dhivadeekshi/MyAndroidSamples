@@ -10,6 +10,7 @@ import com.crashlytics.android.Crashlytics;
 import com.dhivakar.mysamples.cast.GoogleChromeCast;
 //import com.dhivakar.mysamples.download.DownloaderActivity;
 //import com.dhivakar.mysamples.googleplaygames.GPGSAchievements;
+import com.dhivakar.mysamples.notifications.MyFirebaseMessagingService;
 import com.dhivakar.mysamples.notifications.NotificationHelper;
 import com.dhivakar.mysamples.notifications.NotificationsManager;
 import com.dhivakar.mysamples.orientation.OrientationsManager;
@@ -55,6 +56,9 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
                 messagesReceived) {
             LogUtils.d(this, "messagesReceived : " + msg);
         }
+
+        // FCM
+        MyFirebaseMessagingService.FetchFCMToken();
 
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.dhivakar.mysamples.BaseAppCompatActivity;
 import com.dhivakar.mysamples.R;
@@ -18,6 +19,7 @@ public class NotificationsManager extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications_manager);
         UpdateActivityHeader(getString(R.string.notification_samples));
+        UpdateFCMToken();
     }
 
     @Override
@@ -45,6 +47,14 @@ public class NotificationsManager extends BaseAppCompatActivity {
                 break;
 
         }
+    }
+
+    private void UpdateFCMToken()
+    {
+        TextView fcmToken = (TextView) findViewById(R.id.fcmTokenText);
+        if(MyFirebaseMessagingService.FirebaseCMToken.isEmpty())
+            MyFirebaseMessagingService.FetchFCMToken();
+        fcmToken.setText(MyFirebaseMessagingService.FirebaseCMToken);
     }
 
     private void ShowSimpleNotification()

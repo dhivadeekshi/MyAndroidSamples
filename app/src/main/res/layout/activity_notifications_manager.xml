@@ -123,7 +123,15 @@
                 android:text="Show Basci Notification"
                 android:id="@+id/buttonNotificationBasic"
                 android:onClick="onClick"/-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Token:" />
 
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fcmTokenText"/>
 
         </LinearLayout>
 
