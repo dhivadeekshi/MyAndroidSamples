@@ -19,4 +19,5 @@
     <string name="launch_downloader">Launch Downloader</string>
     <string name="externalapps_samples">External Apps Samples</string>
     <string name="default_notification_channel_id">channel_default</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>

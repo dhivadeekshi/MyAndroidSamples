@@ -68,6 +68,8 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
 
         if(v.getId() == R.id.buttonTestCrash)
             CrashForTesting();
+        else if(v.getId() == R.id.buttonPrivacyPolicy)
+            OpenPrivacyPolicy();
     }
 
     @Override
@@ -121,5 +123,14 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
         Crashlytics.log("App Crashed for Testing");
         Crashlytics.getInstance().crash(); /* Force a crash */
     }
+
+    private void OpenPrivacyPolicy()
+    {
+        LogUtils.d(this, "Open Privacy Policy");
+        String privacyPolicyURL = "https://dhivadeekshi.github.io/privacypolicy/";
+        LaunchURL(privacyPolicyURL);
+    }
+
+
 
 }

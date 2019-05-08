@@ -180,6 +180,13 @@ public class BaseAppCompatActivity extends AppCompatActivity implements View.OnC
         startActivity(intent);
     }
 
+    protected void LaunchURL(String url)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
+
 
     // Firebase Analytics
     private void LogActivityLaunch()
