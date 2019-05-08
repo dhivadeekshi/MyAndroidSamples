@@ -20,7 +20,7 @@ public class NotificationHelper {
     public static final String CHANNEL_ID_DEFAULT = "channel_default";
     public static final int NOTIFICATION_ID_DEFAULT = 0;
     public static final int REQUEST_CODE_DEFAULT = 0;
-    public static final int SMALL_ICON_DEFAULT = R.mipmap.ic_launcher;
+    public static final int SMALL_ICON_DEFAULT = R.drawable.ic_notif_icon;
     public static final long[] VIBRATION_PATTERN_DEFAULT = new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400};
 
     public static void CreateNotificationChannels(Context context)
