@@ -66,9 +66,9 @@ public class MainActivity extends BaseAppCompatActivity implements ListenToOrien
     public void onClick(View v) {
         super.onClick(v);
 
-        if(v.getId() == R.id.buttonTestCrash)
+        /*if(v.getId() == R.id.buttonTestCrash)
             CrashForTesting();
-        else if(v.getId() == R.id.buttonPrivacyPolicy)
+        else */if(v.getId() == R.id.buttonPrivacyPolicy)
             OpenPrivacyPolicy();
     }
 
